@@ -1,6 +1,7 @@
 #ifndef INFIZ_STRING_TOKENIZER_H
 #define INFIZ_STRING_TOKENIZER_H
 
+#include <string>
 
 // StringTokenizer.h
 
@@ -12,24 +13,22 @@
 class StringTokenizer
 {
 public:
-	StringTokenizer(char * n_string);
-	~StringTokenizer();
+	StringTokenizer(const std::string &n_string);
 	
-	int hasMoreTokens();
+	bool hasMoreTokens();
 
-	char * nextToken();
-
+	std::string nextToken();
 
 private:
+	std::string string;
 	int currentOffset;
-	int stringLen;
-	char * string;
-	int isNumber(char c);
-	int isOperator(char c);
-	int isWhiteSpace(char c);
-	char * getSubString(char * string, int start, int end);
-	int findTokenEnd(int start, char * string);
-	int moreTokens;
+	bool moreTokens;
+
+	static bool isNumber(char c);
+	static bool isOperator(char c);
+	static bool isWhiteSpace(char c);
+	static std::string getSubString(const std::string &, int start, int end);
+	static int findTokenEnd(int start, const std::string &);
 };
 
 #endif

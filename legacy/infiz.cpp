@@ -16,13 +16,13 @@ void main(int argc, char * args[]) {
 	cin.getline(input,254, '\n');
 
 	while (cin) {
-		StringTokenizer * st = new StringTokenizer(input);
-		RationalNumber * answer = evaluateExpression(st);
+		StringTokenizer st(input);
+		RationalNumber answer = evaluateExpression(st);
 		cout << "answer: ";
-		if (answer->getDenominator()==1)
-			cout <<answer->getNumerator()<<endl<<flush;
+		if (answer.getDenominator()==1)
+			cout <<answer.getNumerator()<<endl<<flush;
 		else
-			cout <<answer->getNumerator()<<'/'<<answer->getDenominator()<<" ("<<answer->getFloat()<<")"<<endl<<flush;
+			cout <<answer.getNumerator()<<'/'<<answer.getDenominator()<<" ("<<answer.getFloat()<<")"<< '\n';
 		cin.getline(input,254, '\n');
 	}
 }

@@ -7,39 +7,36 @@ RationalNumber::RationalNumber(int num, int den) {
 	denominator = den;
 }
 
-RationalNumber::~RationalNumber() {
+void RationalNumber::divide(const RationalNumber & rn) {
+	denominator *= rn.getNumerator();
+	numerator *= rn.getDenominator();
 }
 
-void RationalNumber::divide(RationalNumber * rn) {
-	denominator *= rn->getNumerator();
-	numerator *= rn->getDenominator();
+void RationalNumber::multiply(const RationalNumber & rn) {
+	numerator *= rn.getNumerator();
+	denominator *= rn.getDenominator();
 }
 
-void RationalNumber::multiply(RationalNumber * rn) {
-	numerator *= rn->getNumerator();
-	denominator *= rn->getDenominator();
-}
-
-void RationalNumber::add(RationalNumber * rn) {
-	int denom = denominator * rn->getDenominator();
-	numerator *= rn->getDenominator();
-	int numer = numerator + (rn->getNumerator() * denominator);
+void RationalNumber::add(const RationalNumber &rn) {
+	int denom = denominator * rn.getDenominator();
+	numerator *= rn.getDenominator();
+	int numer = numerator + (rn.getNumerator() * denominator);
 
 	numerator = numer;
 	denominator = denom;
 }
 
-void RationalNumber::subtract(RationalNumber * rn) {
-	int denom = denominator * rn->getDenominator();
+void RationalNumber::subtract(const RationalNumber &rn) {
+	int denom = denominator * rn.getDenominator();
 	
-	numerator *= rn->getDenominator();
-	int numer = numerator - (rn->getNumerator() * denominator);
+	numerator *= rn.getDenominator();
+	int numer = numerator - (rn.getNumerator() * denominator);
 
 	numerator = numer;
 	denominator = denom;
 }
 
-int RationalNumber::getDenominator() {
+int RationalNumber::getDenominator() const {
 	return denominator;
 }
 
@@ -47,7 +44,7 @@ void RationalNumber::negate() {
 	numerator*=-1;
 }
 
-int RationalNumber::getNumerator() {
+int RationalNumber::getNumerator() const {
 	return numerator;
 }
 

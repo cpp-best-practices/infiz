@@ -69,7 +69,7 @@ void evaluateStacks(Stack * numbers, Stack * operators, int num) {
 			operand2 = (RationalNumber *)numbers->pop();
 			operand1 = (RationalNumber *)numbers->pop();
 
-			operand1->add(operand2);
+			operand1->add(*operand2);
 			delete operand2;
 			numbers->push(operand1);
 			break;
@@ -87,7 +87,7 @@ void evaluateStacks(Stack * numbers, Stack * operators, int num) {
 			operand2 = (RationalNumber *)numbers->pop();
 			operand1 = (RationalNumber *)numbers->pop();
 
-			operand1->multiply(operand2);
+			operand1->multiply(*operand2);
 			delete operand2;
 			numbers->push(operand1);
 			break;
@@ -97,7 +97,7 @@ void evaluateStacks(Stack * numbers, Stack * operators, int num) {
 			operand2 = (RationalNumber *)numbers->pop();
 			operand1 = (RationalNumber *)numbers->pop();
 
-			operand1->divide(operand2);
+			operand1->divide(*operand2);
 			delete operand2;
 			numbers->push(operand1);
 			break;
@@ -112,7 +112,7 @@ void evaluateStacks(Stack * numbers, Stack * operators, int num) {
 
 
 
-RationalNumber * evaluateExpression(StringTokenizer * st) {
+RationalNumber evaluateExpression(StringTokenizer & st) {
 	Stack * operators = new Stack();
 	Stack * numbers = new Stack();
 
@@ -120,15 +120,13 @@ RationalNumber * evaluateExpression(StringTokenizer * st) {
 
 	int op;
 
-	char * next;
+	while (st.hasMoreTokens()) {
 
-	while (st->hasMoreTokens()) {
-
-		next = st->nextToken();
+		std::string next = st.nextToken();
 
 		int * value = new int;
 
-		if (next != NULL) {
+		if (!next.empty()) {
 			switch(next[0]) {
 			case '+':
 				*value = PLUS_SIGN;
@@ -156,7 +154,7 @@ RationalNumber * evaluateExpression(StringTokenizer * st) {
 				break;
 
 			default:
-				*value = atoi(next);
+				*value = atoi(next.c_str());
 				op = FALSE;
 				numbers->push(new RationalNumber(*value, 1));
 				break;
@@ -195,6 +193,6 @@ RationalNumber * evaluateExpression(StringTokenizer * st) {
 
 	if (operators->peek() != NULL)
 		evaluateStacks(numbers, operators, 0);
-	return (RationalNumber *)numbers->peek();
+	return *(RationalNumber *)numbers->peek();
 }
 

@@ -11,15 +11,14 @@
 class RationalNumber {
 public:
 	RationalNumber(int num, int den);
-	~RationalNumber();
-	void divide(RationalNumber * rn);
-	void multiply(RationalNumber * rn);
-	void add(RationalNumber * rn);
-	void subtract(RationalNumber * rn);
+	void divide(const RationalNumber & rn);
+	void multiply(const RationalNumber & rn);
+	void add(const RationalNumber & rn);
+	void subtract(const RationalNumber & rn);
 	void negate();
 
-	int getNumerator();
-	int getDenominator();
+	int getNumerator() const;
+	int getDenominator() const;
 
 	float getFloat();
 	

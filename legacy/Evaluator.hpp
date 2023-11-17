@@ -6,7 +6,7 @@
 #include "StringTokenizer.h"
 
 int precedence(int op);
-RationalNumber * evaluateExpression(StringTokenizer * st);
+RationalNumber evaluateExpression(StringTokenizer &st);
 void evaluateStacks(Stack * numbers, Stack * operators, int num);
 
 #endif

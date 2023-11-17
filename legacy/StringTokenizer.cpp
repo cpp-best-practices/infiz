@@ -3,54 +3,38 @@
 #include "StringTokenizer.h"
 #include <string.h>
 
-StringTokenizer::StringTokenizer(char * n_string) {
-
-	string = new char[strlen(n_string) + 1];
-	strcpy(string, n_string);
-
-	stringLen = strlen(string);
-
-	currentOffset = 0;
-	moreTokens = 1;
+StringTokenizer::StringTokenizer(const std::string &n_string)
+	: string(n_string), currentOffset(0), moreTokens(true)
+{
 }
 
-StringTokenizer::~StringTokenizer() 
-{
-	delete [] string;
-}
 
-char * StringTokenizer::nextToken() 
-{
-	char* toReturn;
-	
-	int cont = 1;
+std::string StringTokenizer::nextToken() 
+{	
 	int endOfToken;
 
-	for (;(currentOffset<stringLen) && (isWhiteSpace(string[currentOffset])); currentOffset++);
+	for (;(currentOffset<string.size()) && (isWhiteSpace(string[currentOffset])); currentOffset++);
 
 	endOfToken = findTokenEnd(currentOffset, string);
 
-	toReturn = getSubString(string, currentOffset, endOfToken);
+	std::string toReturn = getSubString(string, currentOffset, endOfToken);
 
 	currentOffset = endOfToken + 1;
 
-	if (currentOffset == stringLen)
-		moreTokens = 0;
+	if (currentOffset >= string.size())
+		moreTokens = false;
 
 	return toReturn;
 }
 
-int StringTokenizer::hasMoreTokens() {
+bool StringTokenizer::hasMoreTokens() {
 	return moreTokens;
 }
 
-int StringTokenizer::findTokenEnd(int start, char * string) {
-	
+int StringTokenizer::findTokenEnd(int start, const std::string& string) {
 	if ( isNumber(string[start]) )  {
-		for (; (currentOffset<stringLen) && (isNumber(string[start])); start++);
-	}
-
-	else {
+		for (; (start<string.size()) && (isNumber(string[start])); start++);
+	} else {
 		if ( isOperator(string[start]) )  {
 			start++;
 		}
@@ -61,23 +45,12 @@ int StringTokenizer::findTokenEnd(int start, char * string) {
 
 
 
-char * StringTokenizer::getSubString(char * string, int start, int end) {
-	char * toReturn;
-	
-	int len = end - start + 1;
-	
-	toReturn = new char[len+1];
-	
-	toReturn[len] = NULL;
-
-	for (int i = 0; i<len; i++)
-		toReturn[i] = string[i+start];
-
-	return toReturn;
+std::string StringTokenizer::getSubString(const std::string &string, int start, int end) {
+	return string.substr(start, end);
 }
 
 
-int StringTokenizer::isOperator(char c) {
+bool StringTokenizer::isOperator(char c) {
 	switch (c) {
 	case '+':
 	case '-':
@@ -94,7 +67,7 @@ int StringTokenizer::isOperator(char c) {
 }
 	
 
-int StringTokenizer::isNumber(char c) {
+bool StringTokenizer::isNumber(char c) {
 	switch (c) {
 	case '1':
 	case '2':
@@ -115,7 +88,7 @@ int StringTokenizer::isNumber(char c) {
 }
 
 
-int StringTokenizer::isWhiteSpace(char c) {
+bool StringTokenizer::isWhiteSpace(char c) {
 	switch (c) {
 	case '1':
 	case '2':
