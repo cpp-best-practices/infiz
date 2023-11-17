@@ -7,41 +7,42 @@ RationalNumber::RationalNumber(int num, int den) {
 	denominator = den;
 }
 
-void RationalNumber::divide(const RationalNumber & rn) {
-	denominator *= rn.getNumerator();
-	numerator *= rn.getDenominator();
+RationalNumber RationalNumber::operator/(const RationalNumber & rn) const {
+	return RationalNumber(
+		numerator * rn.getDenominator(),
+		denominator * rn.getNumerator()
+		);
 }
 
-void RationalNumber::multiply(const RationalNumber & rn) {
-	numerator *= rn.getNumerator();
-	denominator *= rn.getDenominator();
+RationalNumber RationalNumber::operator*(const RationalNumber & rn) const {
+	return RationalNumber(
+		numerator * rn.getNumerator(),
+		denominator * rn.getDenominator());
 }
 
-void RationalNumber::add(const RationalNumber &rn) {
+RationalNumber RationalNumber::operator+(const RationalNumber &rn) const {
 	int denom = denominator * rn.getDenominator();
-	numerator *= rn.getDenominator();
+	int numerator = this->numerator * rn.getDenominator();
 	int numer = numerator + (rn.getNumerator() * denominator);
 
-	numerator = numer;
-	denominator = denom;
+	return RationalNumber(numer, denom);
 }
 
-void RationalNumber::subtract(const RationalNumber &rn) {
+RationalNumber RationalNumber::operator-(const RationalNumber &rn) const {
 	int denom = denominator * rn.getDenominator();
 	
-	numerator *= rn.getDenominator();
+	int numerator = this->numerator * rn.getDenominator();
 	int numer = numerator - (rn.getNumerator() * denominator);
 
-	numerator = numer;
-	denominator = denom;
+	return RationalNumber(numer, denom);
 }
 
 int RationalNumber::getDenominator() const {
 	return denominator;
 }
 
-void RationalNumber::negate() {
-	numerator*=-1;
+RationalNumber RationalNumber::operator-() const {
+	return RationalNumber(numerator * -1, denominator);
 }
 
 int RationalNumber::getNumerator() const {
@@ -49,6 +50,6 @@ int RationalNumber::getNumerator() const {
 }
 
 float RationalNumber::getFloat() {
-	return ( ((float)numerator) / ((float)denominator) );
+	return ( (static_cast<float>(numerator)) / (static_cast<float>(denominator)) );
 }
 

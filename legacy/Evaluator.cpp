@@ -61,18 +61,13 @@ void evaluateStacks(Stack<RationalNumber> &numbers, Stack<int> &operators, int n
 			operators.pop();
 			RationalNumber operand2 = numbers.pop();
 			RationalNumber operand1 = numbers.pop();
-
-			operand1.add(operand2);
-			numbers.push(operand1);
+			numbers.push(operand1 + operand2);
 			break;
 					   }
 
 		case MINUS_SIGN: {
 			operators.pop();
-			RationalNumber operand1 = numbers.pop();
-			operand1.negate();
-
-			numbers.push(operand1);
+			numbers.push(-numbers.pop());
 			break;
 						 }
 
@@ -80,9 +75,7 @@ void evaluateStacks(Stack<RationalNumber> &numbers, Stack<int> &operators, int n
 			operators.pop();
 			RationalNumber operand2 = numbers.pop();
 			RationalNumber operand1 = numbers.pop();
-
-			operand1.multiply(operand2);
-			numbers.push(operand1);
+			numbers.push(operand1 * operand2);
 			break;
 							}
 
@@ -90,9 +83,7 @@ void evaluateStacks(Stack<RationalNumber> &numbers, Stack<int> &operators, int n
 			operators.pop();
 			RationalNumber operand2 = numbers.pop();
 			RationalNumber operand1 = numbers.pop();
-
-			operand1.divide(operand2);
-			numbers.push(operand1);
+			numbers.push(operand1/operand2);
 			break;
 						  }
 		}
