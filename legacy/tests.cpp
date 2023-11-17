@@ -38,7 +38,6 @@ int main() {
 	run_test("((1 + 2) + 3) + 4", RationalNumber(10, 1));
 
 
-	// these fail because we expect grouping into 2's
 	run_test("1 / 2 / 3", RationalNumber(3, 2));
 	run_test("1 + 2 + 3 + 4", RationalNumber(10, 1));
 	return 0;

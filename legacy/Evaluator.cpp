@@ -44,16 +44,14 @@ void evaluateStacks(Stack<RationalNumber> &numbers, Stack<int> &operators, int n
 
 	while ( (operators.peek() != NULL) && cont) {
 
-
 		switch( *operators.peek() ) {
 		case OPEN_PAREN:
 			if (eatOpenParen == true) {
 				operators.pop();
 				cont = false;
-			}
-
-			else
+			} else {
 				cont = false;
+			}
 
 			break;
 			
@@ -103,13 +101,13 @@ RationalNumber evaluateExpression(StringTokenizer & st) {
 
 	bool negateNext = false;
 
-	int op;
 
 	while (st.hasMoreTokens()) {
 
 		std::string next = st.nextToken();
 
 		int value = 0;
+		bool op = false;
 
 		if (!next.empty()) {
 			switch(next[0]) {

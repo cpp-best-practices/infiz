@@ -11,13 +11,15 @@ StringTokenizer::StringTokenizer(const std::string &n_string)
 
 std::string StringTokenizer::nextToken() 
 {	
-	for (;(currentOffset<string.size()) && (isWhiteSpace(string[currentOffset])); currentOffset++);
+	while (currentOffset<string.size() 
+		&& isWhiteSpace(string[currentOffset])) {
+		currentOffset++;
+	}
 	
 	int endOfToken = findTokenEnd(currentOffset, string);
 	
-	std::string toReturn = getSubString(string, currentOffset, endOfToken);
-	
-	currentOffset = endOfToken + 1;
+	std::string toReturn = string.substr(currentOffset, endOfToken-currentOffset);
+	currentOffset = endOfToken;
 	
 	moreTokens = currentOffset < string.size();
 	
@@ -29,15 +31,20 @@ bool StringTokenizer::hasMoreTokens() const {
 }
 
 int StringTokenizer::findTokenEnd(int start, const std::string& string) {
-	if ( isNumber(string[start]) )  {
-		for (; (start<string.size()) && (isNumber(string[start])); ++start) {}
-	} else {
-		if ( isOperator(string[start]) )  {
+	if (string.empty()) {
+		return start;
+	}
+
+	if (isNumber(string[start])) {
+		while (start < string.size() && isNumber(string[start])) {
 			++start;
 		}
+	} else if ( isOperator(string[start]) )  {
+		++start;
 	}
 	
-	return start-1;
+	
+	return start;
 }
 
 
