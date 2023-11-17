@@ -4,42 +4,39 @@
 #include <string.h>
 
 StringTokenizer::StringTokenizer(const std::string &n_string)
-	: string(n_string), currentOffset(0), moreTokens(true)
+  : string(n_string), currentOffset(0), moreTokens(true)
 {
 }
 
 
 std::string StringTokenizer::nextToken() 
 {	
-	int endOfToken;
-
 	for (;(currentOffset<string.size()) && (isWhiteSpace(string[currentOffset])); currentOffset++);
-
-	endOfToken = findTokenEnd(currentOffset, string);
-
+	
+	int endOfToken = findTokenEnd(currentOffset, string);
+	
 	std::string toReturn = getSubString(string, currentOffset, endOfToken);
-
+	
 	currentOffset = endOfToken + 1;
-
-	if (currentOffset >= string.size())
-		moreTokens = false;
-
+	
+	moreTokens = currentOffset < string.size();
+	
 	return toReturn;
 }
 
-bool StringTokenizer::hasMoreTokens() {
+bool StringTokenizer::hasMoreTokens() const {
 	return moreTokens;
 }
 
 int StringTokenizer::findTokenEnd(int start, const std::string& string) {
 	if ( isNumber(string[start]) )  {
-		for (; (start<string.size()) && (isNumber(string[start])); start++);
+		for (; (start<string.size()) && (isNumber(string[start])); ++start) {}
 	} else {
 		if ( isOperator(string[start]) )  {
-			start++;
+			++start;
 		}
 	}
-
+	
 	return start-1;
 }
 
@@ -65,7 +62,7 @@ bool StringTokenizer::isOperator(char c) {
 		break;
 	}
 }
-	
+
 
 bool StringTokenizer::isNumber(char c) {
 	switch (c) {

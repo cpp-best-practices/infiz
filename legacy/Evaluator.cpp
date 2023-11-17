@@ -2,21 +2,18 @@
 #include <stdlib.h>
 #include "Evaluator.hpp"
 
-
-#define PLUS_SIGN 0
-#define CLOSE_PARAN 1
-#define OPEN_PARAN 2
-#define MINUS_SIGN 3
-#define DIVIDE_SIGN 4
-#define MULTIPLY_SIGN 5
-
-#define TRUE 1
-#define FALSE 0
-
+enum Operators{ 
+PLUS_SIGN,
+CLOSE_PAREN,
+OPEN_PAREN,
+MINUS_SIGN,
+DIVIDE_SIGN,
+MULTIPLY_SIGN
+};
 
 int precedence(int op) {
 	switch (op) {
-	case CLOSE_PARAN:
+	case CLOSE_PAREN:
 		return 3;
 	case PLUS_SIGN:
 		return 1;
@@ -26,7 +23,7 @@ int precedence(int op) {
 		return 2;
 	case DIVIDE_SIGN:
 		return 2;
-	case OPEN_PARAN:
+	case OPEN_PAREN:
 		return 0;
 	}
 
@@ -35,13 +32,13 @@ int precedence(int op) {
 
 
 void evaluateStacks(Stack<RationalNumber> &numbers, Stack<int> &operators, int num) {
-	int eatOpenParan = FALSE;
-	int cont = TRUE;
+	bool eatOpenParen = false;
+	bool cont = true;
 
 	int startPrec = precedence(*operators.peek());
 
-	if ( *operators.peek() == CLOSE_PARAN ) {
-		eatOpenParan = TRUE;
+	if ( *operators.peek() == CLOSE_PAREN ) {
+		eatOpenParen = true;
 		operators.pop();
 	}
 
@@ -49,14 +46,14 @@ void evaluateStacks(Stack<RationalNumber> &numbers, Stack<int> &operators, int n
 
 
 		switch( *operators.peek() ) {
-		case OPEN_PARAN:
-			if (eatOpenParan == TRUE) {
+		case OPEN_PAREN:
+			if (eatOpenParen == true) {
 				operators.pop();
-				cont = FALSE;
+				cont = false;
 			}
 
 			else
-				cont = FALSE;
+				cont = false;
 
 			break;
 			
@@ -101,7 +98,7 @@ void evaluateStacks(Stack<RationalNumber> &numbers, Stack<int> &operators, int n
 		}
 		
 		if (num == 1) 
-			cont = FALSE;
+			cont = false;
 
 	}
 }
@@ -113,7 +110,7 @@ RationalNumber evaluateExpression(StringTokenizer & st) {
 	Stack<int> operators;
 	Stack<RationalNumber> numbers;
 
-	int negateNext = FALSE;
+	bool negateNext = false;
 
 	int op;
 
@@ -127,45 +124,44 @@ RationalNumber evaluateExpression(StringTokenizer & st) {
 			switch(next[0]) {
 			case '+':
 				value = PLUS_SIGN;
-				op = TRUE;
+				op = true;
 				break;
 			case '/':
 				value = DIVIDE_SIGN;
-				op = TRUE;
+				op = true;
 				break;
 			case '-':
 				value = MINUS_SIGN;
-				op = TRUE;
+				op = true;
 				break;
 			case '*':
 				value = MULTIPLY_SIGN;
-				op = TRUE;
+				op = true;
 				break;
 			case ')':
-				value = CLOSE_PARAN;
-				op = TRUE;
+				value = CLOSE_PAREN;
+				op = true;
 				break;
 			case '(':
-				value = OPEN_PARAN;
-				op = TRUE;
+				value = OPEN_PAREN;
+				op = true;
 				break;
 
 			default:
 				value = atoi(next.c_str());
-				op = FALSE;
+				op = false;
 				numbers.push(RationalNumber(value, 1));
 				break;
 			}
 
 			if (op) {
-
 				int plus = PLUS_SIGN;
 
 				switch (value) {
-				case OPEN_PARAN:
+				case OPEN_PAREN:
 					operators.push(value);
 					break;
-				case CLOSE_PARAN:
+				case CLOSE_PAREN:
 					operators.push(value);
 					evaluateStacks(numbers, operators, 0);
 					break;

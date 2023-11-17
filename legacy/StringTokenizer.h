@@ -15,7 +15,7 @@ class StringTokenizer
 public:
 	StringTokenizer(const std::string &n_string);
 	
-	bool hasMoreTokens();
+	bool hasMoreTokens() const;
 
 	std::string nextToken();
 
