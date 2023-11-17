@@ -6,7 +6,7 @@
 *.{cmd,[cC][mM][dD]} text eol=crlf
 *.{bat,[bB][aA][tT]} text eol=crlf
 *.{vcxproj,vcxproj.filters} text eol=crlf
-/legacy/*.{cpp,hpp,h,dsp,dsw} text eol=crlf
+/legacy/*.{cpp,hpp,h,dsp,dsw,plg} text eol=crlf
 
 ###############################
 # Git Large File System (LFS) #

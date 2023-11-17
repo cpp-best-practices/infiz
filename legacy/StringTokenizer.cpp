@@ -5,7 +5,7 @@
 
 StringTokenizer::StringTokenizer(char * n_string) {
 
-	string = new char[strlen(n_string)];
+	string = new char[strlen(n_string) + 1];
 	strcpy(string, n_string);
 
 	stringLen = strlen(string);
@@ -16,7 +16,7 @@ StringTokenizer::StringTokenizer(char * n_string) {
 
 StringTokenizer::~StringTokenizer() 
 {
-	delete string;
+	delete [] string;
 }
 
 char * StringTokenizer::nextToken() 
