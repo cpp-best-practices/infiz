@@ -155,17 +155,11 @@ RationalNumber evaluateExpression(StringTokenizer & st) {
 					evaluateStacks(numbers, operators, 0);
 					break;
 				default:
-					if (operators.peek() != NULL) {
-						if ( precedence(value) >= precedence(*operators.peek()) ) {
-							operators.push(value);
-						}
-						if ( precedence(value) < precedence(*operators.peek()) ) {
-							evaluateStacks(numbers, operators, 0);
-							operators.push(value);
-						}
+					if (operators.peek() != NULL
+						&& precedence(value) <= precedence(*operators.peek()) ) {
+						evaluateStacks(numbers, operators, 0);
 					}
-					else
-						operators.push(value);
+					operators.push(value);
 					break;
 				}
 			}

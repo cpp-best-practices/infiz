@@ -38,7 +38,11 @@ int main() {
 	run_test("((1 + 2) + 3) + 4", RationalNumber(10, 1));
 
 
-	run_test("1 / 2 / 3", RationalNumber(3, 2));
+	run_test("1 / 2 / 3", RationalNumber(1, 6));
 	run_test("1 + 2 + 3 + 4", RationalNumber(10, 1));
+	run_test("1+2+3+4", RationalNumber(10, 1));
+	run_test("10/2*3", RationalNumber(30, 2));
+	run_test("10/(2*3)", RationalNumber(10, 6));
+
 	return 0;
 }
