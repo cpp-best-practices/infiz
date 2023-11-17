@@ -3,33 +3,44 @@
 
 // Stack.h
 
+#include <vector>
+#include <cassert>
 
 /**
- * A Class that allows allows void * to be
- * pushed onto an popped off of a stack.
- */
+* A Class that allows allows void * to be
+* pushed onto an popped off of a stack.
+*/
 
+template<typename Contained>
 class Stack
 {
 public:
-	Stack();
-	~Stack();
-	void * pop();
-	void push(void * stackElem);
-	void * peek();
-	int moreThanOne();
-
+	Stack(){}
+	
+	
+	Contained pop() {
+		assert(!data.empty());
+		Contained toReturn = data.back();
+		data.pop_back();
+		return toReturn;
+	}
+	
+	bool moreThanOne() const {
+		return data.size() > 1;
+	}
+	
+	void push(const Contained &newElem) {
+		data.push_back(newElem);
+	}
+	
+	const Contained * peek() const {
+		if (data.empty())
+			return NULL;
+		else
+			return &data.back();
+	}
 private:
-
-	
-	struct stackElem {
-		void * data;
-		stackElem * next;
-	};
-	
-	void deleteStack(stackElem * head);
-	stackElem * head;
-
+	std::vector<Contained> data;
 };
-	
+
 #endif

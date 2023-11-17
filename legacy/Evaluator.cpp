@@ -34,28 +34,24 @@ int precedence(int op) {
 }
 
 
-void evaluateStacks(Stack * numbers, Stack * operators, int num) {
+void evaluateStacks(Stack<RationalNumber> &numbers, Stack<int> &operators, int num) {
 	int eatOpenParan = FALSE;
 	int cont = TRUE;
-	RationalNumber * operand1;
-	RationalNumber * operand2;
 
-	int startPrec = precedence(*(int *)(operators->peek()));
+	int startPrec = precedence(*operators.peek());
 
-	if ( *(int *)(operators->peek()) == CLOSE_PARAN ) {
+	if ( *operators.peek() == CLOSE_PARAN ) {
 		eatOpenParan = TRUE;
-		delete operators->pop();
+		operators.pop();
 	}
 
+	while ( (operators.peek() != NULL) && cont) {
 
 
-	while ( (operators->peek() != NULL) && cont) {
-
-
-		switch( *(int *)(operators->peek()) ) {
+		switch( *operators.peek() ) {
 		case OPEN_PARAN:
 			if (eatOpenParan == TRUE) {
-				delete operators->pop();
+				operators.pop();
 				cont = FALSE;
 			}
 
@@ -64,43 +60,44 @@ void evaluateStacks(Stack * numbers, Stack * operators, int num) {
 
 			break;
 			
-		case PLUS_SIGN:
-			delete operators->pop();
-			operand2 = (RationalNumber *)numbers->pop();
-			operand1 = (RationalNumber *)numbers->pop();
+		case PLUS_SIGN:{
+			operators.pop();
+			RationalNumber operand2 = numbers.pop();
+			RationalNumber operand1 = numbers.pop();
 
-			operand1->add(*operand2);
-			delete operand2;
-			numbers->push(operand1);
+			operand1.add(operand2);
+			numbers.push(operand1);
 			break;
+					   }
 
-		case MINUS_SIGN:
-			delete operators->pop();
-			operand1 = (RationalNumber *)numbers->pop();
-			operand1->negate();
+		case MINUS_SIGN: {
+			operators.pop();
+			RationalNumber operand1 = numbers.pop();
+			operand1.negate();
 
-			numbers->push(operand1);
+			numbers.push(operand1);
 			break;
+						 }
 
-		case MULTIPLY_SIGN:
-			delete operators->pop();
-			operand2 = (RationalNumber *)numbers->pop();
-			operand1 = (RationalNumber *)numbers->pop();
+		case MULTIPLY_SIGN: {
+			operators.pop();
+			RationalNumber operand2 = numbers.pop();
+			RationalNumber operand1 = numbers.pop();
 
-			operand1->multiply(*operand2);
-			delete operand2;
-			numbers->push(operand1);
+			operand1.multiply(operand2);
+			numbers.push(operand1);
 			break;
+							}
 
-		case DIVIDE_SIGN:
-			delete operators->pop();
-			operand2 = (RationalNumber *)numbers->pop();
-			operand1 = (RationalNumber *)numbers->pop();
+		case DIVIDE_SIGN: {
+			operators.pop();
+			RationalNumber operand2 = numbers.pop();
+			RationalNumber operand1 = numbers.pop();
 
-			operand1->divide(*operand2);
-			delete operand2;
-			numbers->push(operand1);
+			operand1.divide(operand2);
+			numbers.push(operand1);
 			break;
+						  }
 		}
 		
 		if (num == 1) 
@@ -113,8 +110,8 @@ void evaluateStacks(Stack * numbers, Stack * operators, int num) {
 
 
 RationalNumber evaluateExpression(StringTokenizer & st) {
-	Stack * operators = new Stack();
-	Stack * numbers = new Stack();
+	Stack<int> operators;
+	Stack<RationalNumber> numbers;
 
 	int negateNext = FALSE;
 
@@ -124,75 +121,79 @@ RationalNumber evaluateExpression(StringTokenizer & st) {
 
 		std::string next = st.nextToken();
 
-		int * value = new int;
+		int value = 0;
 
 		if (!next.empty()) {
 			switch(next[0]) {
 			case '+':
-				*value = PLUS_SIGN;
+				value = PLUS_SIGN;
 				op = TRUE;
 				break;
 			case '/':
-				*value = DIVIDE_SIGN;
+				value = DIVIDE_SIGN;
 				op = TRUE;
 				break;
 			case '-':
-				*value = MINUS_SIGN;
+				value = MINUS_SIGN;
 				op = TRUE;
 				break;
 			case '*':
-				*value = MULTIPLY_SIGN;
+				value = MULTIPLY_SIGN;
 				op = TRUE;
 				break;
 			case ')':
-				*value = CLOSE_PARAN;
+				value = CLOSE_PARAN;
 				op = TRUE;
 				break;
 			case '(':
-				*value = OPEN_PARAN;
+				value = OPEN_PARAN;
 				op = TRUE;
 				break;
 
 			default:
-				*value = atoi(next.c_str());
+				value = atoi(next.c_str());
 				op = FALSE;
-				numbers->push(new RationalNumber(*value, 1));
+				numbers.push(RationalNumber(value, 1));
 				break;
 			}
 
 			if (op) {
 
-				int *plus = new int;
-				*plus = PLUS_SIGN;
+				int plus = PLUS_SIGN;
 
-				switch (*value) {
+				switch (value) {
 				case OPEN_PARAN:
-					operators->push(value);
+					operators.push(value);
 					break;
 				case CLOSE_PARAN:
-					operators->push(value);
+					operators.push(value);
 					evaluateStacks(numbers, operators, 0);
 					break;
 				default:
-					if (operators->peek() != NULL) {
-						if ( precedence(*value) >= precedence(*(int *)(operators->peek())) ) {
-							operators->push(value);
+					if (operators.peek() != NULL) {
+						if ( precedence(value) >= precedence(*operators.peek()) ) {
+							operators.push(value);
 						}
-						if ( precedence(*value) < precedence(*(int *)(operators->peek())) ) {
+						if ( precedence(value) < precedence(*operators.peek()) ) {
 							evaluateStacks(numbers, operators, 0);
-							operators->push(value);
+							operators.push(value);
 						}
 					}
 					else
-						operators->push(value);
+						operators.push(value);
 					break;
 				}
 			}
 		}
 	}
 
-	if (operators->peek() != NULL)
+	if (operators.peek() != NULL)
 		evaluateStacks(numbers, operators, 0);
-	return *(RationalNumber *)numbers->peek();
+
+	if (numbers.peek() != NULL) {
+		return *numbers.peek(); 
+	} else {
+		return RationalNumber(0,0);
+	}
 }
 

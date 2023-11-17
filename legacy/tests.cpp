@@ -34,9 +34,12 @@ int main() {
 	run_test("(3 / 2)", RationalNumber(3, 2));
 	run_test("(4 / 2)", RationalNumber(4, 2));
 	run_test("(4 / 2) * 5", RationalNumber(20, 2));
+	run_test("(1 / 2) / 3", RationalNumber(1, 6));
+	run_test("((1 + 2) + 3) + 4", RationalNumber(10, 1));
 
-	// we need to evaluate this for later, I don't think
-	// this is correct, but we're capturing the current state of things.
+
+	// these fail because we expect grouping into 2's
 	run_test("1 / 2 / 3", RationalNumber(3, 2));
+	run_test("1 + 2 + 3 + 4", RationalNumber(10, 1));
 	return 0;
 }

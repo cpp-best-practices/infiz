@@ -3,9 +3,47 @@
 <pre>
 <h1>Build Log</h1>
 <h3>
+--------------------Configuration: InfixEvaluator - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\Users\Jason\AppData\Local\Temp\RSPAC52.tmp" with contents
+[
+/nologo /MLd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /Fp"Debug/InfixEvaluator.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"C:\Users\Jason\Documents\GitHub\infiz\legacy\Evaluator.cpp"
+"C:\Users\Jason\Documents\GitHub\infiz\legacy\RationalNumber.cpp"
+"C:\Users\Jason\Documents\GitHub\infiz\legacy\Stack.cpp"
+"C:\Users\Jason\Documents\GitHub\infiz\legacy\StringTokenizer.cpp"
+]
+Creating command line "cl.exe @C:\Users\Jason\AppData\Local\Temp\RSPAC52.tmp" 
+Creating command line "link.exe -lib /nologo /out:"Debug\InfixEvaluator.lib"  .\Debug\Evaluator.obj .\Debug\RationalNumber.obj .\Debug\Stack.obj .\Debug\StringTokenizer.obj "
+<h3>Output Window</h3>
+Compiling...
+Evaluator.cpp
+RationalNumber.cpp
+Stack.cpp
+StringTokenizer.cpp
+Creating library...
+<h3>
 --------------------Configuration: tests - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
+Creating temporary file "C:\Users\Jason\AppData\Local\Temp\RSPAE28.tmp" with contents
+[
+/nologo /MLd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/tests.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"C:\Users\Jason\Documents\GitHub\infiz\legacy\tests.cpp"
+]
+Creating command line "cl.exe @C:\Users\Jason\AppData\Local\Temp\RSPAE28.tmp" 
+Creating temporary file "C:\Users\Jason\AppData\Local\Temp\RSPAE29.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/tests.pdb" /debug /machine:I386 /out:"Debug/tests.exe" /pdbtype:sept 
+.\Debug\tests.obj
+\Users\Jason\Documents\GitHub\infiz\legacy\InfixEvaluator\Debug\InfixEvaluator.lib
+]
+Creating command line "link.exe @C:\Users\Jason\AppData\Local\Temp\RSPAE29.tmp"
+<h3>Output Window</h3>
+Compiling...
+tests.cpp
+Linking...
 
 
 

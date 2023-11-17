@@ -7,6 +7,6 @@
 
 int precedence(int op);
 RationalNumber evaluateExpression(StringTokenizer &st);
-void evaluateStacks(Stack * numbers, Stack * operators, int num);
+void evaluateStacks(Stack<RationalNumber> &numbers, Stack<int> &operators, int num);
 
 #endif
