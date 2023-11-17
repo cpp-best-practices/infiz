@@ -1,3 +1,6 @@
+#ifndef INFIZ_STACK_H
+#define INFIZ_STACK_H
+
 // Stack.h
 
 
@@ -29,3 +32,4 @@ private:
 
 };
 	
+#endif

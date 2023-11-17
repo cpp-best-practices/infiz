@@ -1,3 +1,6 @@
+#ifndef INFIZ_RATIONAL_NUMBER_H
+#define INFIZ_RATIONAL_NUMBER_H
+
 //RationalNumber.h
 
 /**
@@ -24,3 +27,5 @@ private:
 	int numerator;
 	int denominator;
 };
+
+#endif

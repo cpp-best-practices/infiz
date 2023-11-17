@@ -1,3 +1,7 @@
+#ifndef INFIZ_STRING_TOKENIZER_H
+#define INFIZ_STRING_TOKENIZER_H
+
+
 // StringTokenizer.h
 
 /**
@@ -27,3 +31,5 @@ private:
 	int findTokenEnd(int start, char * string);
 	int moreTokens;
 };
+
+#endif
