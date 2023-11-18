@@ -13,6 +13,8 @@
 class StringTokenizer
 {
 public:
+	typedef std::string::size_type size_type;
+
 	StringTokenizer(const std::string &n_string);
 	
 	bool hasMoreTokens() const;
@@ -21,14 +23,14 @@ public:
 
 private:
 	std::string string;
-	int currentOffset;
+	size_type currentOffset;
 	bool moreTokens;
 
 	static bool isNumber(char c);
 	static bool isOperator(char c);
 	static bool isWhiteSpace(char c);
-	static std::string getSubString(const std::string &, int start, int end);
-	static int findTokenEnd(int start, const std::string &);
+	static std::string getSubString(const std::string &, size_type start, size_type end);
+	static size_type findTokenEnd(size_type start, const std::string &);
 };
 
 #endif

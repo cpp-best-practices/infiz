@@ -2,9 +2,9 @@
 
 #include "RationalNumber.h"
 
-RationalNumber::RationalNumber(int num, int den) {
-	numerator = num;
-	denominator = den;
+RationalNumber::RationalNumber(int num, int den)
+	: numerator(num), denominator(den)
+{
 }
 
 RationalNumber RationalNumber::operator/(const RationalNumber & rn) const {

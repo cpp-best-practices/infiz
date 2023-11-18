@@ -19,10 +19,12 @@ void main(int argc, char * args[]) {
 		StringTokenizer st(input);
 		RationalNumber answer = evaluateExpression(st);
 		cout << "answer: ";
+
 		if (answer.getDenominator()==1)
-			cout <<answer.getNumerator()<<endl<<flush;
+			cout <<answer.getNumerator()<< '\n';
 		else
 			cout <<answer.getNumerator()<<'/'<<answer.getDenominator()<<" ("<<answer.getFloat()<<")"<< '\n';
+
 		cin.getline(input,254, '\n');
 	}
 }

@@ -24,20 +24,17 @@ public:
 		data.pop_back();
 		return toReturn;
 	}
-	
-	bool moreThanOne() const {
-		return data.size() > 1;
-	}
-	
+		
 	void push(const Contained &newElem) {
 		data.push_back(newElem);
 	}
 	
 	const Contained * peek() const {
-		if (data.empty())
+		if (data.empty()) {
 			return NULL;
-		else
+		} else {
 			return &data.back();
+		}
 	}
 private:
 	std::vector<Contained> data;

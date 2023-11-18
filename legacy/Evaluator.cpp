@@ -3,12 +3,12 @@
 #include "Evaluator.hpp"
 
 enum Operators{ 
-PLUS_SIGN,
-CLOSE_PAREN,
-OPEN_PAREN,
-MINUS_SIGN,
-DIVIDE_SIGN,
-MULTIPLY_SIGN
+	PLUS_SIGN,
+	CLOSE_PAREN,
+	OPEN_PAREN,
+	MINUS_SIGN,
+	DIVIDE_SIGN,
+	MULTIPLY_SIGN
 };
 
 int precedence(int op) {
@@ -31,7 +31,7 @@ int precedence(int op) {
 }
 
 
-void evaluateStacks(Stack<RationalNumber> &numbers, Stack<int> &operators, int num) {
+void evaluateStacks(Stack<RationalNumber> &numbers, Stack<int> &operators) {
 	bool eatOpenParen = false;
 	bool cont = true;
 
@@ -81,14 +81,11 @@ void evaluateStacks(Stack<RationalNumber> &numbers, Stack<int> &operators, int n
 			operators.pop();
 			RationalNumber operand2 = numbers.pop();
 			RationalNumber operand1 = numbers.pop();
-			numbers.push(operand1/operand2);
+			numbers.push(operand1 / operand2);
 			break;
 						  }
 		}
 		
-		if (num == 1) 
-			cont = false;
-
 	}
 }
 
@@ -106,7 +103,7 @@ RationalNumber evaluateExpression(StringTokenizer & st) {
 
 		std::string next = st.nextToken();
 
-		int value = 0;
+		Operators value = PLUS_SIGN;
 		bool op = false;
 
 		if (!next.empty()) {
@@ -137,9 +134,8 @@ RationalNumber evaluateExpression(StringTokenizer & st) {
 				break;
 
 			default:
-				value = atoi(next.c_str());
 				op = false;
-				numbers.push(RationalNumber(value, 1));
+				numbers.push(RationalNumber(atoi(next.c_str()), 1));
 				break;
 			}
 
@@ -152,12 +148,12 @@ RationalNumber evaluateExpression(StringTokenizer & st) {
 					break;
 				case CLOSE_PAREN:
 					operators.push(value);
-					evaluateStacks(numbers, operators, 0);
+					evaluateStacks(numbers, operators);
 					break;
 				default:
 					if (operators.peek() != NULL
 						&& precedence(value) <= precedence(*operators.peek()) ) {
-						evaluateStacks(numbers, operators, 0);
+						evaluateStacks(numbers, operators);
 					}
 					operators.push(value);
 					break;
@@ -167,7 +163,7 @@ RationalNumber evaluateExpression(StringTokenizer & st) {
 	}
 
 	if (operators.peek() != NULL)
-		evaluateStacks(numbers, operators, 0);
+		evaluateStacks(numbers, operators);
 
 	if (numbers.peek() != NULL) {
 		return *numbers.peek(); 

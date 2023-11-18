@@ -12,13 +12,15 @@
 #include "Evaluator.hpp"
 
 
-void run_test(const std::string &input, RationalNumber expected)
+void run_test(const std::string &input, RationalNumber expected, bool &success)
 {
 	StringTokenizer st(input);
 	RationalNumber result = evaluateExpression(st);
 
+
 	if (result.getDenominator() != expected.getDenominator() ||
 		result.getNumerator() != expected.getNumerator()) {
+		success = false;
 		std::cout << "FAIL: ";
 	} else {
 		std::cout << "PASS: ";
@@ -30,19 +32,24 @@ void run_test(const std::string &input, RationalNumber expected)
 }
 
 int main() {
-	run_test("(3 + 2)", RationalNumber(5, 1));
-	run_test("(3 / 2)", RationalNumber(3, 2));
-	run_test("(4 / 2)", RationalNumber(4, 2));
-	run_test("(4 / 2) * 5", RationalNumber(20, 2));
-	run_test("(1 / 2) / 3", RationalNumber(1, 6));
-	run_test("((1 + 2) + 3) + 4", RationalNumber(10, 1));
+	bool all_passed = true;
 
+	run_test("(3 + 2)", RationalNumber(5, 1), all_passed);
+	run_test("(3 / 2)", RationalNumber(3, 2), all_passed);
+	run_test("(4 / 2)", RationalNumber(4, 2), all_passed);
+	run_test("(4 / 2) * 5", RationalNumber(20, 2), all_passed);
+	run_test("(1 / 2) / 3", RationalNumber(1, 6), all_passed);
+	run_test("((1 + 2) + 3) + 4", RationalNumber(10, 1), all_passed);
 
-	run_test("1 / 2 / 3", RationalNumber(1, 6));
-	run_test("1 + 2 + 3 + 4", RationalNumber(10, 1));
-	run_test("1+2+3+4", RationalNumber(10, 1));
-	run_test("10/2*3", RationalNumber(30, 2));
-	run_test("10/(2*3)", RationalNumber(10, 6));
+	run_test("1 / 2 / 3", RationalNumber(1, 6), all_passed);
+	run_test("1 + 2 + 3 + 4", RationalNumber(10, 1), all_passed);
+	run_test("1+2+3+4", RationalNumber(10, 1), all_passed);
+	run_test("10/2*3", RationalNumber(30, 2), all_passed);
+	run_test("10/(2*3)", RationalNumber(10, 6), all_passed);
 
-	return 0;
+	if (all_passed) {
+		return EXIT_SUCCESS;
+	} else {
+		return EXIT_FAILURE;
+	}
 }

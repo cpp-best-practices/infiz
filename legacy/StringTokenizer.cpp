@@ -13,10 +13,10 @@ std::string StringTokenizer::nextToken()
 {	
 	while (currentOffset<string.size() 
 		&& isWhiteSpace(string[currentOffset])) {
-		currentOffset++;
+		++currentOffset;
 	}
 	
-	int endOfToken = findTokenEnd(currentOffset, string);
+	size_type endOfToken = findTokenEnd(currentOffset, string);
 	
 	std::string toReturn = string.substr(currentOffset, endOfToken-currentOffset);
 	currentOffset = endOfToken;
@@ -30,7 +30,7 @@ bool StringTokenizer::hasMoreTokens() const {
 	return moreTokens;
 }
 
-int StringTokenizer::findTokenEnd(int start, const std::string& string) {
+StringTokenizer::size_type StringTokenizer::findTokenEnd(size_type start, const std::string& string) {
 	if (string.empty()) {
 		return start;
 	}
@@ -49,7 +49,7 @@ int StringTokenizer::findTokenEnd(int start, const std::string& string) {
 
 
 
-std::string StringTokenizer::getSubString(const std::string &string, int start, int end) {
+std::string StringTokenizer::getSubString(const std::string &string, size_type start, size_type end) {
 	return string.substr(start, end);
 }
 
@@ -62,10 +62,10 @@ bool StringTokenizer::isOperator(char c) {
 	case '*':
 	case '(':
 	case ')':
-		return 1;
+		return true;
 		break;
 	default:
-		return 0;
+		return false;
 		break;
 	}
 }
@@ -83,39 +83,17 @@ bool StringTokenizer::isNumber(char c) {
 	case '8':
 	case '9':
 	case '0':
-		return 1;
+		return true;
 		break;
 	default:
-		return 0;
+		return false;
 		break;
 	}
 }
 
 
 bool StringTokenizer::isWhiteSpace(char c) {
-	switch (c) {
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '0':
-	case '+':
-	case '-':
-	case '/':
-	case '*':
-	case '(':
-	case ')':
-		return 0;
-		break;
-	default:
-		return 1;
-		break;
-	}
+	return !isNumber(c) && !isOperator(c);
 }
 
 
