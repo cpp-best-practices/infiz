@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.21)
 
 # Only set the cxx_standard if it is not set by someone else
 if (NOT DEFINED CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 20)
+  set(CMAKE_CXX_STANDARD 98)
 endif()
 
 # strongly encouraged to enable this globally to avoid conflicts between
@@ -51,8 +51,8 @@ target_compile_features(infiz_options INTERFACE cxx_std_${CMAKE_CXX_STANDARD})
 add_library(infiz::infiz_options ALIAS infiz_options)
 add_library(infiz::infiz_warnings ALIAS infiz_warnings)
 
-#add_library(infiz::infiz_options INTERFACE IMPORTED)
-#add_library(infiz::infiz_warnings INTERFACE IMPORTED)
+#add_library(libinfiz::infiz_options INTERFACE IMPORTED)
+#add_library(libinfiz::infiz_warnings INTERFACE IMPORTED)
 
 # configure files based on CMake configuration options
 add_subdirectory(configured_files)
@@ -92,7 +92,7 @@ if(MSVC)
 endif()
 
 # set the startup project for the "play" button in MSVC
-set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT intro)
+set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT infiz)
 
 if(CMAKE_SKIP_INSTALL_RULES)
   return()
@@ -104,7 +104,7 @@ include(cmake/PackageProject.cmake)
 # we know we want to ship
 infiz_package_project(
   TARGETS
-  intro
+  infiz
   infiz_options
   infiz_warnings
   # FIXME: this does not work! CK

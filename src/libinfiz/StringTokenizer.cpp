@@ -1,9 +1,9 @@
 // StringTokenizer.cpp
 
 #include "StringTokenizer.h"
-#include <string.h>
+#include <string>
 
-StringTokenizer::StringTokenizer(const std::string &n_string)
+StringTokenizer::StringTokenizer(const std::string &n_string) // NOLINT
   : string(n_string), currentOffset(0), moreTokens(true)
 {
 }
@@ -16,7 +16,7 @@ std::string StringTokenizer::nextToken()
 		++currentOffset;
 	}
 	
-	size_type endOfToken = findTokenEnd(currentOffset, string);
+	const size_type endOfToken = findTokenEnd(currentOffset, string);
 	
 	std::string toReturn = string.substr(currentOffset, endOfToken-currentOffset);
 	currentOffset = endOfToken;
@@ -49,13 +49,8 @@ StringTokenizer::size_type StringTokenizer::findTokenEnd(size_type start, const 
 
 
 
-std::string StringTokenizer::getSubString(const std::string &string, size_type start, size_type end) {
-	return string.substr(start, end);
-}
-
-
-bool StringTokenizer::isOperator(char c) {
-	switch (c) {
+bool StringTokenizer::isOperator(char input) {
+	switch (input) {
 	case '+':
 	case '-':
 	case '/':
@@ -63,16 +58,14 @@ bool StringTokenizer::isOperator(char c) {
 	case '(':
 	case ')':
 		return true;
-		break;
 	default:
 		return false;
-		break;
 	}
 }
 
 
-bool StringTokenizer::isNumber(char c) {
-	switch (c) {
+bool StringTokenizer::isNumber(char input) {
+	switch (input) {
 	case '1':
 	case '2':
 	case '3':
@@ -84,16 +77,14 @@ bool StringTokenizer::isNumber(char c) {
 	case '9':
 	case '0':
 		return true;
-		break;
 	default:
 		return false;
-		break;
 	}
 }
 
 
-bool StringTokenizer::isWhiteSpace(char c) {
-	return !isNumber(c) && !isOperator(c);
+bool StringTokenizer::isWhiteSpace(char input) {
+	return !isNumber(input) && !isOperator(input);
 }
 
 

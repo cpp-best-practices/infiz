@@ -17,6 +17,11 @@ endif()
 # Generate compile_commands.json to make it easier to work with clang based tools
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  add_compile_options($<$<CONFIG:Debug>:-Od>)
+endif()
+
 # Enhance error reporting and compiler messages
 if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
   if(WIN32)
@@ -33,6 +38,7 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   else()
     add_compile_options(-fdiagnostics-color=always)
   endif()
+
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND MSVC_VERSION GREATER 1900)
   add_compile_options(/diagnostics:column)
 else()

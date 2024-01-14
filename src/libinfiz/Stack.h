@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <cassert>
+#include <cstddef>
 
 /**
 * A Class that allows allows void * to be

@@ -5,8 +5,11 @@
 #include "Stack.h"
 #include "StringTokenizer.h"
 
-int precedence(int op);
-RationalNumber evaluateExpression(StringTokenizer &st);
+enum Operators { PLUS_SIGN, CLOSE_PAREN, OPEN_PAREN, MINUS_SIGN, DIVIDE_SIGN, MULTIPLY_SIGN };
+
+
+int precedence(Operators input);
+RationalNumber evaluateExpression(StringTokenizer &tokenizer);
 void evaluateStacks(Stack<RationalNumber> &numbers, Stack<int> &operators);
 
 #endif

@@ -11,16 +11,16 @@
 class RationalNumber {
 public:
 	RationalNumber(int num, int den);
-	RationalNumber operator/(const RationalNumber &other) const;
-	RationalNumber operator*(const RationalNumber &other) const;
-	RationalNumber operator+(const RationalNumber &other) const;
-	RationalNumber operator-(const RationalNumber &other) const;
+	RationalNumber operator/(const RationalNumber &rhs) const;
+	RationalNumber operator*(const RationalNumber &rhs) const;
+	RationalNumber operator+(const RationalNumber &rhs) const;
+	RationalNumber operator-(const RationalNumber &rhs) const;
 	RationalNumber operator-() const;
 
 	int getNumerator() const;
 	int getDenominator() const;
 
-	float getFloat();
+	float getFloat() const;
 	
 private:
 	int numerator;

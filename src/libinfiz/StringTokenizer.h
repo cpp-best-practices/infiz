@@ -15,7 +15,7 @@ class StringTokenizer
 public:
 	typedef std::string::size_type size_type;
 
-	StringTokenizer(const std::string &n_string);
+	explicit StringTokenizer(const std::string &n_string);
 	
 	bool hasMoreTokens() const;
 
@@ -26,10 +26,9 @@ private:
 	size_type currentOffset;
 	bool moreTokens;
 
-	static bool isNumber(char c);
-	static bool isOperator(char c);
-	static bool isWhiteSpace(char c);
-	static std::string getSubString(const std::string &, size_type start, size_type end);
+	static bool isNumber(char input);
+	static bool isOperator(char input);
+	static bool isWhiteSpace(char input);
 	static size_type findTokenEnd(size_type start, const std::string &);
 };
 
