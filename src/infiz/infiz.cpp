@@ -3,11 +3,12 @@
 #include "../libinfiz/Evaluator.hpp"
 
 #include <array>
+#include <format>
 #include <iostream>
 
 constexpr int max_line = 255;
 
-auto main(int /*argc*/, char * /*args*/[]) -> int
+auto main() -> int
 {
   std::array<char, max_line> input{};
 
@@ -18,9 +19,10 @@ auto main(int /*argc*/, char * /*args*/[]) -> int
     std::cout << "answer: ";
 
     if (answer.getDenominator() == 1) {
-      std::cout << answer.getNumerator() << '\n';
+      std::cout << std::format("{}\n", answer.getNumerator());
     } else {
-      std::cout << answer.getNumerator() << '/' << answer.getDenominator() << " (" << answer.getFloat() << ")" << '\n';
+      std::cout << std::format(
+        "{}/{} ({})\n", answer.getNumerator(), answer.getDenominator(), answer.asFloat<double>());
     }
 
     std::cin.getline(input.data(), max_line - 1, '\n');

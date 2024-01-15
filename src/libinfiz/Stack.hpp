@@ -1,26 +1,21 @@
 #ifndef INFIZ_STACK_HPP
 #define INFIZ_STACK_HPP
 
-// Stack.h
 
 #include <cassert>
 #include <cstddef>
 #include <vector>
 #include <stdexcept>
 
-/**
- * A Class that allows allows void * to be
- * pushed onto an popped off of a stack.
- */
 
 template<typename Contained> class Stack
 {
 public:
-  Stack() = default;
+  constexpr Stack() = default;
 
-  [[nodiscard]] auto empty() const noexcept -> bool { return data.empty(); }
+  [[nodiscard]] constexpr auto empty() const noexcept -> bool { return data.empty(); }
 
-  auto pop() -> Contained
+  constexpr auto pop() -> Contained
   {
     if (data.empty()) { throw std::runtime_error("No elements left to pop!"); }
     Contained toReturn = data.back();
@@ -28,15 +23,14 @@ public:
     return toReturn;
   }
 
-  template<typename... Param> auto emplace(Param &&...param) -> Contained &
+  template<typename... Param> constexpr auto emplace(Param &&...param) -> Contained &
   {
-    data.emplace_back(std::forward<Param>(param)...);
-    return data.back();
+    return data.emplace_back(std::forward<Param>(param)...);
   }
 
-  void push(const Contained &newElem) { data.push_back(newElem); }
+  constexpr void push(const Contained &newElem) { data.push_back(newElem); }
 
-  [[nodiscard]] auto peek() const -> const Contained *
+  [[nodiscard]] constexpr auto peek() const -> const Contained *
   {
     if (data.empty()) {
       return nullptr;

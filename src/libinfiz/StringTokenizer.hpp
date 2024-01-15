@@ -24,6 +24,7 @@
 [[nodiscard]] constexpr auto isNumber(char input) noexcept -> bool
 {
   switch (input) {
+  case '0':
   case '1':
   case '2':
   case '3':
@@ -33,7 +34,6 @@
   case '7':
   case '8':
   case '9':
-  case '0':
     return true;
   default:
     return false;

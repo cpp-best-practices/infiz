@@ -1,14 +1,12 @@
 #ifndef INFIZ_RATIONAL_NUMBER_H
 #define INFIZ_RATIONAL_NUMBER_H
 
-// RationalNumber.h
 #include <numeric>
 
 /**
  * A Class that stores the numerator and denominator
  * of a rational number.
  */
-
 class RationalNumber
 {
 public:
@@ -26,26 +24,28 @@ public:
     }
   }
 
-  [[nodiscard]] constexpr auto operator/(const RationalNumber &rhs) const noexcept -> RationalNumber
+  [[nodiscard]] constexpr auto operator/(const RationalNumber &rhs) const noexcept
   {
     return RationalNumber{ numerator * rhs.getDenominator(), denominator * rhs.getNumerator() }.simplify();
   }
 
-  [[nodiscard]] constexpr auto operator*(const RationalNumber &rhs) const noexcept -> RationalNumber
+  [[nodiscard]] constexpr auto operator*(const RationalNumber &rhs) const noexcept
   {
     return RationalNumber{ numerator * rhs.getNumerator(), denominator * rhs.getDenominator() }.simplify();
   }
 
-  [[nodiscard]] constexpr auto operator+(const RationalNumber &rhs) const noexcept -> RationalNumber
+  [[nodiscard]] constexpr auto operator+(const RationalNumber &rhs) const noexcept
   {
     return RationalNumber{ numerator * rhs.getDenominator() + (rhs.getNumerator() * denominator),
-      denominator * rhs.getDenominator() }.simplify();
+      denominator * rhs.getDenominator() }
+      .simplify();
   }
 
-  [[nodiscard]] constexpr auto operator-(const RationalNumber &rhs) const noexcept -> RationalNumber
+  [[nodiscard]] constexpr auto operator-(const RationalNumber &rhs) const noexcept
   {
     return RationalNumber{ numerator * rhs.getDenominator() - (rhs.getNumerator() * denominator),
-      denominator * rhs.getDenominator() }.simplify();
+      denominator * rhs.getDenominator() }
+      .simplify();
   }
 
   [[nodiscard]] constexpr auto getDenominator() const noexcept -> int { return denominator; }
@@ -54,14 +54,13 @@ public:
 
   [[nodiscard]] constexpr auto getNumerator() const noexcept -> int { return numerator; }
 
-  [[nodiscard]] constexpr auto getFloat() const noexcept -> float
+
+  template<std::floating_point Float> [[nodiscard]] constexpr auto asFloat() const noexcept -> Float
   {
-    return ((static_cast<float>(numerator)) / (static_cast<float>(denominator)));
+    return ((static_cast<Float>(numerator)) / (static_cast<Float>(denominator)));
   }
 
-  [[nodiscard]] constexpr auto operator==(const RationalNumber &rhs) const noexcept -> bool {
-    return numerator == rhs.numerator && denominator == rhs.denominator;
-  }
+  [[nodiscard]] constexpr auto operator<=>(const RationalNumber &rhs) const noexcept = default;
 
 private:
   int numerator;
