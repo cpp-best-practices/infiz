@@ -8,7 +8,7 @@ target_link_libraries(
   fuzz_tester
   PRIVATE infiz_options
           infiz_warnings
-          fmt::fmt
+          libinfiz
           -coverage
           -fsanitize=fuzzer)
 target_compile_options(fuzz_tester PRIVATE -fsanitize=fuzzer)

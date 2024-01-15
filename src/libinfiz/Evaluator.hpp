@@ -4,11 +4,12 @@
 #include "RationalNumber.hpp"
 #include "Stack.hpp"
 #include "StringTokenizer.hpp"
+#include <string_view>
 
 enum struct Operators { PLUS_SIGN, CLOSE_PAREN, OPEN_PAREN, MINUS_SIGN, DIVIDE_SIGN, MULTIPLY_SIGN };
 
 
-auto evaluateExpression(StringTokenizer &tokenizer) -> RationalNumber;
-void evaluateStacks(Stack<RationalNumber> &numbers, Stack<Operators> &operators);
+[[nodiscard]] auto evaluate(std::string_view input) -> RationalNumber;
+
 
 #endif

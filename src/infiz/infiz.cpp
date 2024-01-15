@@ -14,8 +14,7 @@ auto main(int /*argc*/, char * /*args*/[]) -> int
   std::cin.getline(input.data(), max_line - 1, '\n');
 
   while (std::cin.good()) {
-    StringTokenizer tokenizer(input.data());
-    const auto answer = evaluateExpression(tokenizer);
+    const auto answer = evaluate(input.data());
     std::cout << "answer: ";
 
     if (answer.getDenominator() == 1) {

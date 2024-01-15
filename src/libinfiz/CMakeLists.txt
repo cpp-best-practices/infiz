@@ -3,7 +3,7 @@ include(GenerateExportHeader)
 
 add_library(libinfiz
         Evaluator.cpp
-        StringTokenizer.cpp)
+)
 
 
 

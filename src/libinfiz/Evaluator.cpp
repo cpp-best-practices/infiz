@@ -1,7 +1,6 @@
 
 #include "Evaluator.hpp"
-#include <cstdlib>
-
+#include <charconv>
 
 constexpr auto precedence(Operators input) noexcept -> int
 {
@@ -123,7 +122,9 @@ auto evaluateExpression(StringTokenizer &tokenizer) -> RationalNumber
 
       default:
         operation = false;
-        numbers.emplace(atoi(next.c_str()), 1);// NOLINT
+        int parsed= 0;
+        std::from_chars(next.begin(), next.end(), parsed);
+        numbers.emplace(parsed, 1);
         break;
       }
 
@@ -154,4 +155,10 @@ auto evaluateExpression(StringTokenizer &tokenizer) -> RationalNumber
   } else {
     return { 0, 0 };
   }
+}
+
+auto evaluate(std::string_view input) -> RationalNumber
+{
+  StringTokenizer tokenizer(input);
+  return evaluateExpression(tokenizer);
 }

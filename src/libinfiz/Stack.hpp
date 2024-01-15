@@ -17,7 +17,7 @@ template<typename Contained> class Stack
 public:
   Stack() = default;
 
-  auto empty() const noexcept -> bool { return data.empty(); }
+  [[nodiscard]] auto empty() const noexcept -> bool { return data.empty(); }
 
   auto pop() -> Contained
   {
@@ -36,7 +36,7 @@ public:
 
   void push(const Contained &newElem) { data.push_back(newElem); }
 
-  auto peek() const -> const Contained *
+  [[nodiscard]] auto peek() const -> const Contained *
   {
     if (data.empty()) {
       return nullptr;

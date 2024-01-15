@@ -2,6 +2,7 @@
 #define INFIZ_RATIONAL_NUMBER_H
 
 // RationalNumber.h
+#include <numeric>
 
 /**
  * A Class that stores the numerator and denominator
@@ -15,40 +16,46 @@ public:
     : numerator(num), denominator(den)
   {}
 
-  constexpr auto operator/(const RationalNumber &rhs) const noexcept -> RationalNumber
+  [[nodiscard]] constexpr auto simplify() const noexcept -> RationalNumber
   {
-    return { numerator * rhs.getDenominator(), denominator * rhs.getNumerator() };
+    const auto gcd = std::gcd(numerator, denominator);
+    return {numerator / gcd, denominator / gcd};
   }
 
-  constexpr auto operator*(const RationalNumber &rhs) const noexcept -> RationalNumber
+  [[nodiscard]] constexpr auto operator/(const RationalNumber &rhs) const noexcept -> RationalNumber
   {
-    return { numerator * rhs.getNumerator(), denominator * rhs.getDenominator() };
+    return RationalNumber{ numerator * rhs.getDenominator(), denominator * rhs.getNumerator() }.simplify();
   }
 
-  constexpr auto operator+(const RationalNumber &rhs) const noexcept -> RationalNumber
+  [[nodiscard]] constexpr auto operator*(const RationalNumber &rhs) const noexcept -> RationalNumber
   {
-    return { numerator * rhs.getDenominator() + (rhs.getNumerator() * denominator),
-      denominator * rhs.getDenominator() };
+    return RationalNumber{ numerator * rhs.getNumerator(), denominator * rhs.getDenominator() }.simplify();
   }
 
-  constexpr auto operator-(const RationalNumber &rhs) const noexcept -> RationalNumber
+  [[nodiscard]] constexpr auto operator+(const RationalNumber &rhs) const noexcept -> RationalNumber
   {
-    return { numerator * rhs.getDenominator() - (rhs.getNumerator() * denominator),
-      denominator * rhs.getDenominator() };
+    return RationalNumber{ numerator * rhs.getDenominator() + (rhs.getNumerator() * denominator),
+      denominator * rhs.getDenominator() }.simplify();
   }
 
-  constexpr auto getDenominator() const noexcept -> int { return denominator; }
+  [[nodiscard]] constexpr auto operator-(const RationalNumber &rhs) const noexcept -> RationalNumber
+  {
+    return RationalNumber{ numerator * rhs.getDenominator() - (rhs.getNumerator() * denominator),
+      denominator * rhs.getDenominator() }.simplify();
+  }
 
-  constexpr auto operator-() const -> RationalNumber { return { numerator * -1, denominator }; }
+  [[nodiscard]] constexpr auto getDenominator() const noexcept -> int { return denominator; }
 
-  constexpr auto getNumerator() const noexcept -> int { return numerator; }
+  [[nodiscard]] constexpr auto operator-() const -> RationalNumber { return { numerator * -1, denominator }; }
 
-  constexpr auto getFloat() const noexcept -> float
+  [[nodiscard]] constexpr auto getNumerator() const noexcept -> int { return numerator; }
+
+  [[nodiscard]] constexpr auto getFloat() const noexcept -> float
   {
     return ((static_cast<float>(numerator)) / (static_cast<float>(denominator)));
   }
 
-  constexpr auto operator==(const RationalNumber &rhs) const noexcept -> bool {
+  [[nodiscard]] constexpr auto operator==(const RationalNumber &rhs) const noexcept -> bool {
     return numerator == rhs.numerator && denominator == rhs.denominator;
   }
 
