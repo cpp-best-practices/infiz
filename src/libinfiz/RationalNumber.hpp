@@ -48,6 +48,10 @@ public:
     return ((static_cast<float>(numerator)) / (static_cast<float>(denominator)));
   }
 
+  constexpr bool operator==(const RationalNumber &rhs) const noexcept {
+    return numerator == rhs.numerator && denominator == rhs.denominator;
+  }
+
 private:
   int numerator;
   int denominator;

@@ -24,9 +24,9 @@ function(infiz_setup_dependencies)
   #    "SPDLOG_FMT_EXTERNAL ON")
   #endif()
 
-  #if(NOT TARGET Catch2::Catch2WithMain)
-  #  cpmaddpackage("gh:catchorg/Catch2@3.3.2")
-  #endif()
+  if(NOT TARGET Catch2::Catch2WithMain)
+    cpmaddpackage("gh:catchorg/Catch2@3.5.2")
+  endif()
 
   #if(NOT TARGET CLI11::CLI11)
   #  cpmaddpackage("gh:CLIUtils/CLI11@2.3.2")
