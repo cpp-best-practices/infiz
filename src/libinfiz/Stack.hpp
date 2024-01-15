@@ -6,6 +6,7 @@
 #include <cassert>
 #include <cstddef>
 #include <vector>
+#include <stdexcept>
 
 /**
  * A Class that allows allows void * to be
@@ -21,8 +22,7 @@ public:
 
   auto pop() -> Contained
   {
-    // TODO is an assert the best option here?
-    assert(!data.empty());
+    if (data.empty()) { throw std::runtime_error("No elements left to pop!"); }
     Contained toReturn = data.back();
     data.pop_back();
     return toReturn;

@@ -9,7 +9,6 @@ target_link_libraries(
   PRIVATE infiz_options
           infiz_warnings
           libinfiz
-          -coverage
           -fsanitize=fuzzer)
 target_compile_options(fuzz_tester PRIVATE -fsanitize=fuzzer)
 

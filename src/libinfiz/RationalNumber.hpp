@@ -19,7 +19,11 @@ public:
   [[nodiscard]] constexpr auto simplify() const noexcept -> RationalNumber
   {
     const auto gcd = std::gcd(numerator, denominator);
-    return {numerator / gcd, denominator / gcd};
+    if (gcd == 0) {
+      return *this;
+    } else {
+      return { numerator / gcd, denominator / gcd };
+    }
   }
 
   [[nodiscard]] constexpr auto operator/(const RationalNumber &rhs) const noexcept -> RationalNumber

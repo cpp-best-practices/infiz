@@ -9,7 +9,12 @@ add_library(libinfiz
 
 add_library(infiz::libinfiz ALIAS libinfiz)
 
-target_link_libraries(libinfiz PRIVATE infiz_options infiz_warnings)
+target_link_libraries(libinfiz PRIVATE infiz_options infiz_warnings -fsanitize=fuzzer-no-link)
+
+if (infiz_BUILD_FUZZ_TESTS)
+  target_link_libraries(libinfiz PRIVATE -fsanitize=fuzzer-no-link)
+  target_compile_options(libinfiz PRIVATE -fsanitize=fuzzer-no-link)
+endif()
 
 target_include_directories(libinfiz ${WARNING_GUARD} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
                                                                   $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>)
