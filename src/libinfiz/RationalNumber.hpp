@@ -15,40 +15,40 @@ public:
     : numerator(num), denominator(den)
   {}
 
-  constexpr RationalNumber operator/(const RationalNumber &rhs) const noexcept
+  constexpr auto operator/(const RationalNumber &rhs) const noexcept -> RationalNumber
   {
     return { numerator * rhs.getDenominator(), denominator * rhs.getNumerator() };
   }
 
-  constexpr RationalNumber operator*(const RationalNumber &rhs) const noexcept
+  constexpr auto operator*(const RationalNumber &rhs) const noexcept -> RationalNumber
   {
     return { numerator * rhs.getNumerator(), denominator * rhs.getDenominator() };
   }
 
-  constexpr RationalNumber operator+(const RationalNumber &rhs) const noexcept
+  constexpr auto operator+(const RationalNumber &rhs) const noexcept -> RationalNumber
   {
     return { numerator * rhs.getDenominator() + (rhs.getNumerator() * denominator),
       denominator * rhs.getDenominator() };
   }
 
-  constexpr RationalNumber operator-(const RationalNumber &rhs) const noexcept
+  constexpr auto operator-(const RationalNumber &rhs) const noexcept -> RationalNumber
   {
     return { numerator * rhs.getDenominator() - (rhs.getNumerator() * denominator),
       denominator * rhs.getDenominator() };
   }
 
-  constexpr int getDenominator() const noexcept { return denominator; }
+  constexpr auto getDenominator() const noexcept -> int { return denominator; }
 
-  constexpr RationalNumber operator-() const { return { numerator * -1, denominator }; }
+  constexpr auto operator-() const -> RationalNumber { return { numerator * -1, denominator }; }
 
-  constexpr int getNumerator() const noexcept { return numerator; }
+  constexpr auto getNumerator() const noexcept -> int { return numerator; }
 
-  constexpr float getFloat() const noexcept
+  constexpr auto getFloat() const noexcept -> float
   {
     return ((static_cast<float>(numerator)) / (static_cast<float>(denominator)));
   }
 
-  constexpr bool operator==(const RationalNumber &rhs) const noexcept {
+  constexpr auto operator==(const RationalNumber &rhs) const noexcept -> bool {
     return numerator == rhs.numerator && denominator == rhs.denominator;
   }
 

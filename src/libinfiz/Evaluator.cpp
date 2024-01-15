@@ -3,7 +3,7 @@
 #include <cstdlib>
 
 
-int precedence(Operators input) noexcept
+constexpr auto precedence(Operators input) noexcept -> int
 {
   switch (input) {
   case Operators::CLOSE_PAREN:
@@ -32,7 +32,7 @@ void evaluateStacks(Stack<RationalNumber> &numbers, Stack<Operators> &operators)
     operators.pop();
   }
 
-  while (!operators.empty() && cont && (operators.peek() != nullptr)) {
+  while (operators.peek() != nullptr && cont) {
 
     switch (*operators.peek()) {
     case Operators::OPEN_PAREN:
@@ -82,7 +82,7 @@ void evaluateStacks(Stack<RationalNumber> &numbers, Stack<Operators> &operators)
 }
 
 
-RationalNumber evaluateExpression(StringTokenizer &tokenizer)
+auto evaluateExpression(StringTokenizer &tokenizer) -> RationalNumber
 {
   Stack<Operators> operators;
   Stack<RationalNumber> numbers;

@@ -7,7 +7,7 @@
 
 constexpr int max_line = 255;
 
-int main(int /*argc*/, char * /*args*/[])
+auto main(int /*argc*/, char * /*args*/[]) -> int
 {
   std::array<char, max_line> input{};
 

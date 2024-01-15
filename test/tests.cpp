@@ -9,7 +9,7 @@
 #include "../src/libinfiz/Evaluator.hpp"
 
 
-RationalNumber evaluate(const std::string &input)
+auto evaluate(const std::string &input) -> RationalNumber
 {
   StringTokenizer tokenizer(input);
   return evaluateExpression(tokenizer);

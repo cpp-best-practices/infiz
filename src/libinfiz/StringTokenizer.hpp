@@ -15,19 +15,55 @@ class StringTokenizer
 public:
   explicit StringTokenizer(std::string n_string) noexcept;
 
-  bool hasMoreTokens() const noexcept { return moreTokens; }
+  auto hasMoreTokens() const noexcept -> bool { return moreTokens; }
 
-  std::string nextToken();
+  auto nextToken() -> std::string;
 
 private:
   std::string string;
   std::size_t currentOffset;
   bool moreTokens;
 
-  static bool isNumber(char input) noexcept;
-  static bool isOperator(char input) noexcept;
-  static bool isWhiteSpace(char input) noexcept;
-  static std::size_t findTokenEnd(std::size_t start, const std::string &);
 };
+
+
+constexpr auto isOperator(char input) noexcept -> bool
+{
+  switch (input) {
+  case '+':
+  case '-':
+  case '/':
+  case '*':
+  case '(':
+  case ')':
+    return true;
+  default:
+    return false;
+  }
+}
+
+
+constexpr auto isNumber(char input) noexcept -> bool
+{
+  switch (input) {
+  case '1':
+  case '2':
+  case '3':
+  case '4':
+  case '5':
+  case '6':
+  case '7':
+  case '8':
+  case '9':
+  case '0':
+    return true;
+  default:
+    return false;
+  }
+}
+
+
+constexpr auto isWhiteSpace(char input) noexcept -> bool { return !isNumber(input) && !isOperator(input); }
+
 
 #endif

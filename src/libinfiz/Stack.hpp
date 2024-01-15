@@ -17,27 +17,26 @@ template<typename Contained> class Stack
 public:
   Stack() = default;
 
-  bool empty() const noexcept {
-    return data.empty();
-  }
+  auto empty() const noexcept -> bool { return data.empty(); }
 
-  Contained pop()
+  auto pop() -> Contained
   {
+    // TODO is an assert the best option here?
     assert(!data.empty());
     Contained toReturn = data.back();
     data.pop_back();
     return toReturn;
   }
 
-  template<typename ... Param>
-  Contained &emplace( Param && ... param) {
+  template<typename... Param> auto emplace(Param &&...param) -> Contained &
+  {
     data.emplace_back(std::forward<Param>(param)...);
     return data.back();
   }
 
   void push(const Contained &newElem) { data.push_back(newElem); }
 
-  const Contained *peek() const
+  auto peek() const -> const Contained *
   {
     if (data.empty()) {
       return nullptr;
