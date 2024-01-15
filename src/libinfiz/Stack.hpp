@@ -1,5 +1,5 @@
-#ifndef INFIZ_STACK_H
-#define INFIZ_STACK_H
+#ifndef INFIZ_STACK_HPP
+#define INFIZ_STACK_HPP
 
 // Stack.h
 
@@ -15,8 +15,11 @@
 template<typename Contained> class Stack
 {
 public:
-  Stack() {}
+  Stack() = default;
 
+  bool empty() const noexcept {
+    return data.empty();
+  }
 
   Contained pop()
   {
@@ -26,12 +29,18 @@ public:
     return toReturn;
   }
 
+  template<typename ... Param>
+  Contained &emplace( Param && ... param) {
+    data.emplace_back(std::forward<Param>(param)...);
+    return data.back();
+  }
+
   void push(const Contained &newElem) { data.push_back(newElem); }
 
   const Contained *peek() const
   {
     if (data.empty()) {
-      return NULL;
+      return nullptr;
     } else {
       return &data.back();
     }

@@ -1,25 +1,21 @@
 // infiz.cpp
 
 #include "../libinfiz/Evaluator.hpp"
-#include "../libinfiz/RationalNumber.h"
-#include "../libinfiz/Stack.h"
-#include "../libinfiz/StringTokenizer.h"
 
-#include <cstdlib>
+#include <array>
 #include <iostream>
 
-const int max_line = 255;
+constexpr int max_line = 255;
 
 int main(int /*argc*/, char * /*args*/[])
 {
+  std::array<char, max_line> input{};
 
-  char input[max_line];// NOLINT
-
-  std::cin.getline(static_cast<char *>(input), max_line - 1, '\n');
+  std::cin.getline(input.data(), max_line - 1, '\n');
 
   while (std::cin.good()) {
-    StringTokenizer tokenizer(static_cast<const char *>(input));
-    const RationalNumber answer = evaluateExpression(tokenizer);
+    StringTokenizer tokenizer(input.data());
+    const auto answer = evaluateExpression(tokenizer);
     std::cout << "answer: ";
 
     if (answer.getDenominator() == 1) {
@@ -28,6 +24,6 @@ int main(int /*argc*/, char * /*args*/[])
       std::cout << answer.getNumerator() << '/' << answer.getDenominator() << " (" << answer.getFloat() << ")" << '\n';
     }
 
-    std::cin.getline(static_cast<char *>(input), max_line - 1, '\n');
+    std::cin.getline(input.data(), max_line - 1, '\n');
   }
 }

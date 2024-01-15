@@ -3,18 +3,18 @@
 #include <cstdlib>
 
 
-int precedence(Operators input)
+int precedence(Operators input) noexcept
 {
   switch (input) {
-  case CLOSE_PAREN:
+  case Operators::CLOSE_PAREN:
     return 3;
-  case PLUS_SIGN:
-  case MINUS_SIGN:
+  case Operators::PLUS_SIGN:
+  case Operators::MINUS_SIGN:
     return 1;
-  case MULTIPLY_SIGN:
-  case DIVIDE_SIGN:
+  case Operators::MULTIPLY_SIGN:
+  case Operators::DIVIDE_SIGN:
     return 2;
-  case OPEN_PAREN:
+  case Operators::OPEN_PAREN:
     return 0;
   }
 
@@ -22,20 +22,20 @@ int precedence(Operators input)
 }
 
 
-void evaluateStacks(Stack<RationalNumber> &numbers, Stack<int> &operators)
+void evaluateStacks(Stack<RationalNumber> &numbers, Stack<Operators> &operators)
 {
   bool eatOpenParen = false;
   bool cont = true;
 
-  if (*operators.peek() == CLOSE_PAREN) {
+  if (!operators.empty() && *operators.peek() == Operators::CLOSE_PAREN) {
     eatOpenParen = true;
     operators.pop();
   }
 
-  while ((operators.peek() != NULL) && cont) {// NOLINT
+  while (!operators.empty() && cont && (operators.peek() != nullptr)) {
 
     switch (*operators.peek()) {
-    case OPEN_PAREN:
+    case Operators::OPEN_PAREN:
       if (eatOpenParen) {
         operators.pop();
         cont = false;
@@ -45,35 +45,38 @@ void evaluateStacks(Stack<RationalNumber> &numbers, Stack<int> &operators)
 
       break;
 
-    case PLUS_SIGN: {
+    case Operators::PLUS_SIGN: {
       operators.pop();
-      const RationalNumber operand2 = numbers.pop();
-      const RationalNumber operand1 = numbers.pop();
+      const auto operand2 = numbers.pop();
+      const auto operand1 = numbers.pop();
       numbers.push(operand1 + operand2);
       break;
     }
 
-    case MINUS_SIGN: {
+    case Operators::MINUS_SIGN: {
       operators.pop();
       numbers.push(-numbers.pop());
       break;
     }
 
-    case MULTIPLY_SIGN: {
+    case Operators::MULTIPLY_SIGN: {
       operators.pop();
-      const RationalNumber operand2 = numbers.pop();
-      const RationalNumber operand1 = numbers.pop();
+      const auto operand2 = numbers.pop();
+      const auto operand1 = numbers.pop();
       numbers.push(operand1 * operand2);
       break;
     }
 
-    case DIVIDE_SIGN: {
+    case Operators::DIVIDE_SIGN: {
       operators.pop();
-      const RationalNumber operand2 = numbers.pop();
-      const RationalNumber operand1 = numbers.pop();
+      const auto operand2 = numbers.pop();
+      const auto operand1 = numbers.pop();
       numbers.push(operand1 / operand2);
       break;
     }
+
+    case Operators::CLOSE_PAREN:
+      break;// we want to continue
     }
   }
 }
@@ -81,61 +84,60 @@ void evaluateStacks(Stack<RationalNumber> &numbers, Stack<int> &operators)
 
 RationalNumber evaluateExpression(StringTokenizer &tokenizer)
 {
-  Stack<int> operators;
+  Stack<Operators> operators;
   Stack<RationalNumber> numbers;
 
   while (tokenizer.hasMoreTokens()) {
 
-    std::string next = tokenizer.nextToken();
+    auto next = tokenizer.nextToken();
 
-    Operators value = PLUS_SIGN;
+    auto value = Operators::PLUS_SIGN;
 
     if (!next.empty()) {
-      bool operation = false;
+      auto operation = false;
       switch (next[0]) {
       case '+':
-        value = PLUS_SIGN;
+        value = Operators::PLUS_SIGN;
         operation = true;
         break;
       case '/':
-        value = DIVIDE_SIGN;
+        value = Operators::DIVIDE_SIGN;
         operation = true;
         break;
       case '-':
-        value = MINUS_SIGN;
+        value = Operators::MINUS_SIGN;
         operation = true;
         break;
       case '*':
-        value = MULTIPLY_SIGN;
+        value = Operators::MULTIPLY_SIGN;
         operation = true;
         break;
       case ')':
-        value = CLOSE_PAREN;
+        value = Operators::CLOSE_PAREN;
         operation = true;
         break;
       case '(':
-        value = OPEN_PAREN;
+        value = Operators::OPEN_PAREN;
         operation = true;
         break;
 
       default:
         operation = false;
-        numbers.push(RationalNumber(atoi(next.c_str()), 1));// NOLINT
+        numbers.emplace(atoi(next.c_str()), 1);// NOLINT
         break;
       }
 
       if (operation) {
         switch (value) {
-        case OPEN_PAREN:
+        case Operators::OPEN_PAREN:
           operators.push(value);
           break;
-        case CLOSE_PAREN:
+        case Operators::CLOSE_PAREN:
           operators.push(value);
           evaluateStacks(numbers, operators);
           break;
         default:
-          if (operators.peek() != NULL// NOLINT
-              && precedence(value) <= precedence(static_cast<Operators>(*operators.peek()))) {
+          if (operators.peek() != nullptr && precedence(value) <= precedence(*operators.peek())) {
             evaluateStacks(numbers, operators);
           }
           operators.push(value);
@@ -145,12 +147,11 @@ RationalNumber evaluateExpression(StringTokenizer &tokenizer)
     }
   }
 
-  if (operators.peek() != NULL)// NOLINT
-    evaluateStacks(numbers, operators);
+  if (operators.peek() != nullptr) { evaluateStacks(numbers, operators); }
 
-  if (numbers.peek() != NULL) {// NOLINT
+  if (numbers.peek() != nullptr) {
     return *numbers.peek();
   } else {
-    return RationalNumber(0, 0);// NOLINT
+    return { 0, 0 };
   }
 }

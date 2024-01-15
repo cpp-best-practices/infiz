@@ -3,7 +3,6 @@ include(GenerateExportHeader)
 
 add_library(libinfiz
         Evaluator.cpp
-        RationalNumber.cpp
         StringTokenizer.cpp)
 
 
@@ -15,7 +14,6 @@ target_link_libraries(libinfiz PRIVATE infiz_options infiz_warnings)
 target_include_directories(libinfiz ${WARNING_GUARD} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
                                                                   $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>)
 
-target_compile_features(libinfiz PUBLIC cxx_std_20)
 
 set_target_properties(
   libinfiz
