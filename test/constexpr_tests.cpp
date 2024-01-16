@@ -28,6 +28,12 @@ TEST_CASE("Addition")
   STATIC_REQUIRE(evaluate("(3 + (2 + 4))") == RationalNumber(9, 1));// NOLINT
 }
 
+TEST_CASE("Subtraction")
+{
+  STATIC_REQUIRE(evaluate("(3 - 2)") == RationalNumber(1, 1));// NOLINT
+  STATIC_REQUIRE(evaluate("(3 + (2 - 4))") == RationalNumber(1, 1));// NOLINT
+}
+
 TEST_CASE("Division")
 {
   STATIC_REQUIRE(evaluate("(3 / 2)") == RationalNumber(3, 2));// NOLINT

@@ -4,8 +4,9 @@
 #include "RationalNumber.hpp"
 #include "Stack.hpp"
 #include "StringTokenizer.hpp"
-#include <string_view>
 #include <concepts>
+#include <string_view>
+#include <format>
 
 enum struct Operators { PLUS_SIGN, CLOSE_PAREN, OPEN_PAREN, MINUS_SIGN, DIVIDE_SIGN, MULTIPLY_SIGN };
 
@@ -61,7 +62,9 @@ constexpr void evaluateStacks(Stack<RationalNumber> &numbers, Stack<Operators> &
 
     case Operators::MINUS_SIGN: {
       operators.pop();
-      numbers.push(-numbers.pop());
+      const auto operand2 = numbers.pop();
+      const auto operand1 = numbers.pop();
+      numbers.push(operand1 - operand2);
       break;
     }
 
@@ -88,16 +91,15 @@ constexpr void evaluateStacks(Stack<RationalNumber> &numbers, Stack<Operators> &
 }
 
 
-template<std::integral Type>
-[[nodiscard]] constexpr auto from_chars(std::string_view input) -> Type
+template<std::integral Type> [[nodiscard]] constexpr auto from_chars(std::string_view input) -> Type
 {
-  Type result{0};
+  Type result{ 0 };
 
   for (const char digit : input) {
-    result *= 10; // NOLINT
+    result *= 10;// NOLINT
 
-    if (digit >= '0' && digit <= '9') {
-      result += static_cast<Type>(digit - '0');
+    if (digit >= '0' && digit <= '9') { result += static_cast<Type>(digit - '0'); } else {
+      throw std::range_error("not a number");
     }
   }
 
@@ -109,9 +111,28 @@ template<std::integral Type>
   Stack<Operators> operators;
   Stack<RationalNumber> numbers;
 
+  const auto throw_error = [&tokenizer] [[noreturn]] ()  {
+    throw std::runtime_error(std::format(
+      R"(Unable to evaluate expression
+{}
+{}^ unevaluated)",
+      tokenizer.input(),
+      std::string(tokenizer.offset(), ' ')));
+  };
+
+  const auto evalStacks = [&]() {
+    try {
+      evaluateStacks(numbers, operators);
+    } catch (const std::runtime_error &) {
+      throw_error();
+    }
+  };
+
   while (tokenizer.hasMoreTokens()) {
 
     auto next = tokenizer.nextToken();
+
+    if (next.empty()) { throw_error(); }
 
     auto value = Operators::PLUS_SIGN;
 
@@ -145,8 +166,12 @@ template<std::integral Type>
 
       default:
         operation = false;
-        const std::integral auto parsed = from_chars<int>(next);
-        numbers.emplace(parsed, 1);
+        try {
+          const std::integral auto parsed = from_chars<int>(next);
+          numbers.emplace(parsed, 1);
+        } catch (const std::range_error &) {
+          throw_error();
+        }
         break;
       }
 
@@ -157,12 +182,10 @@ template<std::integral Type>
           break;
         case Operators::CLOSE_PAREN:
           operators.push(value);
-          evaluateStacks(numbers, operators);
+          evalStacks();
           break;
         default:
-          if (operators.peek() != nullptr && precedence(value) <= precedence(*operators.peek())) {
-            evaluateStacks(numbers, operators);
-          }
+          if (operators.peek() != nullptr && precedence(value) <= precedence(*operators.peek())) { evalStacks(); }
           operators.push(value);
           break;
         }
@@ -170,13 +193,17 @@ template<std::integral Type>
     }
   }
 
-  if (operators.peek() != nullptr) { evaluateStacks(numbers, operators); }
+  if (operators.peek() != nullptr) { evalStacks(); }
+
+  if (!operators.empty() || tokenizer.hasUnparsedInput()) {
+    throw_error();
+  }
 
   if (numbers.peek() != nullptr) {
     return *numbers.peek();
-  } else {
-    return { 0, 0 };
   }
+
+  throw_error();
 }
 
 [[nodiscard]] constexpr auto evaluate(std::string_view input) -> RationalNumber

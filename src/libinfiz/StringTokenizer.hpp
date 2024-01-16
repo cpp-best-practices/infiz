@@ -57,7 +57,7 @@
 
 [[nodiscard]] constexpr auto isWhiteSpace(char input) noexcept -> bool
 {
-  return !isNumber(input) && !isOperator(input);
+  return input == ' ' || input == '\t' || input == '\n' || input == '\r';
 }
 
 
@@ -85,8 +85,20 @@ public:
     return returnValue;
   }
 
-  [[nodiscard]] constexpr auto hasMoreTokens() const {
+  [[nodiscard]] constexpr auto hasUnparsedInput() const noexcept {
+    return currentOffset < string.size();
+  }
+
+  [[nodiscard]] constexpr auto hasMoreTokens() const noexcept {
     return moreTokens;
+  }
+
+  [[nodiscard]] constexpr auto input() const noexcept {
+    return string;
+  }
+
+  [[nodiscard]] constexpr auto offset() const noexcept {
+    return currentOffset;
   }
 
 private:

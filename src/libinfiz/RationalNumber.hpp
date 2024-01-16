@@ -1,6 +1,7 @@
 #ifndef INFIZ_RATIONAL_NUMBER_H
 #define INFIZ_RATIONAL_NUMBER_H
 
+#include <compare>
 #include <numeric>
 
 /**
