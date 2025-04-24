@@ -4,7 +4,6 @@
 #include <string_view>
 
 
-
 [[nodiscard]] constexpr auto isOperator(char input) noexcept -> bool
 {
   switch (input) {
@@ -68,9 +67,7 @@
 class StringTokenizer
 {
 public:
-  constexpr explicit StringTokenizer(std::string_view n_string) noexcept
-    : string(n_string)
-  {}
+  constexpr explicit StringTokenizer(std::string_view n_string) noexcept : string(n_string) {}
 
 
   [[nodiscard]] constexpr auto nextToken() -> std::string_view
@@ -85,27 +82,18 @@ public:
     return returnValue;
   }
 
-  [[nodiscard]] constexpr auto hasUnparsedInput() const noexcept {
-    return currentOffset < string.size();
-  }
+  [[nodiscard]] constexpr auto hasUnparsedInput() const noexcept { return currentOffset < string.size(); }
 
-  [[nodiscard]] constexpr auto hasMoreTokens() const noexcept {
-    return moreTokens;
-  }
+  [[nodiscard]] constexpr auto hasMoreTokens() const noexcept { return moreTokens; }
 
-  [[nodiscard]] constexpr auto input() const noexcept {
-    return string;
-  }
+  [[nodiscard]] constexpr auto input() const noexcept { return string; }
 
-  [[nodiscard]] constexpr auto offset() const noexcept {
-    return currentOffset;
-  }
+  [[nodiscard]] constexpr auto offset() const noexcept { return currentOffset; }
 
 private:
   std::string_view string;
-  std::size_t currentOffset{0};
-  bool moreTokens{true};
-
+  std::size_t currentOffset{ 0 };
+  bool moreTokens{ true };
 };
 
 

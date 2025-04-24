@@ -4,15 +4,13 @@
 
 #include <cassert>
 #include <cstddef>
-#include <vector>
 #include <expected>
-#include <string>
 #include <format>
+#include <string>
+#include <vector>
 
 // Simple error enum - no need for additional information
-enum class StackError {
-  EMPTY_STACK
-};
+enum class StackError { EMPTY_STACK };
 
 template<typename Contained> class Stack
 {
@@ -23,9 +21,7 @@ public:
 
   constexpr auto pop() -> std::expected<Contained, StackError>
   {
-    if (data.empty()) { 
-      return std::unexpected(StackError::EMPTY_STACK); 
-    }
+    if (data.empty()) { return std::unexpected(StackError::EMPTY_STACK); }
     Contained toReturn = data.back();
     data.pop_back();
     return toReturn;

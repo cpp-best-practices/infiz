@@ -2,8 +2,8 @@
 #define INFIZ_RATIONAL_NUMBER_H
 
 #include <compare>
-#include <numeric>
 #include <cstdlib>
+#include <numeric>
 
 /**
  * A Class that stores the numerator and denominator
@@ -19,10 +19,8 @@ public:
   [[nodiscard]] constexpr auto simplify() const noexcept -> RationalNumber
   {
     // Handle negative denominators - move the negative sign to the numerator
-    if (denominator < 0) {
-      return RationalNumber(-numerator, -denominator).simplify();
-    }
-    
+    if (denominator < 0) { return RationalNumber(-numerator, -denominator).simplify(); }
+
     const auto gcd = std::gcd(std::abs(numerator), denominator);
     if (gcd == 0) {
       return *this;
@@ -34,9 +32,7 @@ public:
   [[nodiscard]] constexpr auto operator/(const RationalNumber &rhs) const noexcept
   {
     // Check for division by zero - return 1/0 which will be infinity when displayed as float
-    if (rhs.getNumerator() == 0) {
-      return RationalNumber{ 1, 0 };
-    }
+    if (rhs.getNumerator() == 0) { return RationalNumber{ 1, 0 }; }
     return RationalNumber{ numerator * rhs.getDenominator(), denominator * rhs.getNumerator() }.simplify();
   }
 
