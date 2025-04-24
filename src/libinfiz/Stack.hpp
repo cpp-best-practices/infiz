@@ -9,9 +9,9 @@
 #include <string>
 #include <format>
 
-struct StackError {
-  std::string message;
-  explicit constexpr StackError(std::string_view msg) : message(msg) {}
+// Simple error enum - no need for additional information
+enum class StackError {
+  EMPTY_STACK
 };
 
 template<typename Contained> class Stack
@@ -24,7 +24,7 @@ public:
   constexpr auto pop() -> std::expected<Contained, StackError>
   {
     if (data.empty()) { 
-      return std::unexpected(StackError("No elements left to pop!")); 
+      return std::unexpected(StackError::EMPTY_STACK); 
     }
     Contained toReturn = data.back();
     data.pop_back();

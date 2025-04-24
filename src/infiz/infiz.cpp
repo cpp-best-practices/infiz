@@ -28,7 +28,31 @@ auto main() -> int
           "{}/{} ({})\n", answer.getNumerator(), answer.getDenominator(), answer.asFloat<double>());
       }
     } else {
-      std::cout << result.error().message << '\n';
+      // Format the error message with the expression and position indicator
+      const auto& error = result.error();
+      
+      // Get error type message
+      std::string errorTypeMsg;
+      switch (error.type) {
+        case EvaluationError::ErrorType::INVALID_NUMBER:
+          errorTypeMsg = "Invalid number - expected only digits";
+          break;
+        case EvaluationError::ErrorType::EMPTY_TOKEN:
+          errorTypeMsg = "Empty token encountered";
+          break;
+        case EvaluationError::ErrorType::STACK_ERROR:
+          errorTypeMsg = "Stack error - expression might be malformed";
+          break;
+        case EvaluationError::ErrorType::INVALID_EXPRESSION:
+        default:
+          errorTypeMsg = "Invalid expression";
+          break;
+      }
+      
+      // Print a visually appealing error with position indicator
+      std::cout << "\033[1;31mError:\033[0m " << errorTypeMsg << "\n\n";
+      std::cout << "  " << input.data() << "\n";
+      std::cout << "  " << std::string(error.position, ' ') << "\033[1;31m^\033[0m\n\n";
     }
 
     std::cin.getline(input.data(), max_line - 1, '\n');

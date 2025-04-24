@@ -12,18 +12,19 @@
 
 enum struct Operators { PLUS_SIGN, CLOSE_PAREN, OPEN_PAREN, MINUS_SIGN, DIVIDE_SIGN, MULTIPLY_SIGN };
 
+// Evaluation errors with position information
 struct EvaluationError {
   enum class ErrorType {
-    INVALID_NUMBER,
-    INVALID_EXPRESSION,
-    EMPTY_TOKEN,
-    STACK_EMPTY
+    INVALID_NUMBER,    // Invalid character in number
+    INVALID_EXPRESSION, // General parsing error
+    EMPTY_TOKEN,       // Empty token found
+    STACK_ERROR        // Error with the stack operations
   };
   
   ErrorType type;
-  std::string message;
+  size_t position; // Position in the expression where the error occurred
   
-  constexpr EvaluationError(ErrorType t, std::string_view msg) : type(t), message(msg) {}
+  constexpr EvaluationError(ErrorType t, size_t pos = 0) : type(t), position(pos) {}
 };
 
 constexpr auto precedence(Operators input) noexcept -> int
@@ -73,16 +74,12 @@ constexpr auto evaluateStacks(Stack<RationalNumber> &numbers, Stack<Operators> &
       operators.pop();
       auto operand2_result = numbers.pop();
       if (!operand2_result) {
-        return std::unexpected(EvaluationError(
-          EvaluationError::ErrorType::STACK_EMPTY,
-          std::format("Missing second operand for + operation: {}", operand2_result.error().message)));
+        return std::unexpected(EvaluationError(EvaluationError::ErrorType::STACK_ERROR));
       }
       
       auto operand1_result = numbers.pop();
       if (!operand1_result) {
-        return std::unexpected(EvaluationError(
-          EvaluationError::ErrorType::STACK_EMPTY,
-          std::format("Missing first operand for + operation: {}", operand1_result.error().message)));
+        return std::unexpected(EvaluationError(EvaluationError::ErrorType::STACK_ERROR));
       }
       
       numbers.push(*operand1_result + *operand2_result);
@@ -93,16 +90,12 @@ constexpr auto evaluateStacks(Stack<RationalNumber> &numbers, Stack<Operators> &
       operators.pop();
       auto operand2_result = numbers.pop();
       if (!operand2_result) {
-        return std::unexpected(EvaluationError(
-          EvaluationError::ErrorType::STACK_EMPTY,
-          std::format("Missing second operand for - operation: {}", operand2_result.error().message)));
+        return std::unexpected(EvaluationError(EvaluationError::ErrorType::STACK_ERROR));
       }
       
       auto operand1_result = numbers.pop();
       if (!operand1_result) {
-        return std::unexpected(EvaluationError(
-          EvaluationError::ErrorType::STACK_EMPTY,
-          std::format("Missing first operand for - operation: {}", operand1_result.error().message)));
+        return std::unexpected(EvaluationError(EvaluationError::ErrorType::STACK_ERROR));
       }
       
       numbers.push(*operand1_result - *operand2_result);
@@ -113,16 +106,12 @@ constexpr auto evaluateStacks(Stack<RationalNumber> &numbers, Stack<Operators> &
       operators.pop();
       auto operand2_result = numbers.pop();
       if (!operand2_result) {
-        return std::unexpected(EvaluationError(
-          EvaluationError::ErrorType::STACK_EMPTY,
-          std::format("Missing second operand for * operation: {}", operand2_result.error().message)));
+        return std::unexpected(EvaluationError(EvaluationError::ErrorType::STACK_ERROR));
       }
       
       auto operand1_result = numbers.pop();
       if (!operand1_result) {
-        return std::unexpected(EvaluationError(
-          EvaluationError::ErrorType::STACK_EMPTY,
-          std::format("Missing first operand for * operation: {}", operand1_result.error().message)));
+        return std::unexpected(EvaluationError(EvaluationError::ErrorType::STACK_ERROR));
       }
       
       numbers.push(*operand1_result * *operand2_result);
@@ -133,16 +122,12 @@ constexpr auto evaluateStacks(Stack<RationalNumber> &numbers, Stack<Operators> &
       operators.pop();
       auto operand2_result = numbers.pop();
       if (!operand2_result) {
-        return std::unexpected(EvaluationError(
-          EvaluationError::ErrorType::STACK_EMPTY,
-          std::format("Missing second operand for / operation: {}", operand2_result.error().message)));
+        return std::unexpected(EvaluationError(EvaluationError::ErrorType::STACK_ERROR));
       }
       
       auto operand1_result = numbers.pop();
       if (!operand1_result) {
-        return std::unexpected(EvaluationError(
-          EvaluationError::ErrorType::STACK_EMPTY,
-          std::format("Missing first operand for / operation: {}", operand1_result.error().message)));
+        return std::unexpected(EvaluationError(EvaluationError::ErrorType::STACK_ERROR));
       }
       
       numbers.push(*operand1_result / *operand2_result);
@@ -163,15 +148,17 @@ template<std::integral Type>
 {
   Type result{ 0 };
 
-  for (const char digit : input) {
+  for (size_t i = 0; i < input.size(); ++i) {
+    const char digit = input[i];
     result *= 10;// NOLINT
 
     if (digit >= '0' && digit <= '9') { 
       result += static_cast<Type>(digit - '0'); 
     } else {
+      // Return position information with the error
       return std::unexpected(EvaluationError(
         EvaluationError::ErrorType::INVALID_NUMBER, 
-        std::format("Invalid digit '{}' in number", digit)));
+        i));
     }
   }
 
@@ -184,25 +171,15 @@ template<std::integral Type>
   Stack<Operators> operators;
   Stack<RationalNumber> numbers;
 
-  const auto make_error = [&tokenizer](EvaluationError::ErrorType type, std::string_view msg = "") -> EvaluationError {
-    std::string contextual_message = std::format(
-      R"(Unable to evaluate expression
-{}
-{}^ unevaluated)",
-      tokenizer.input(),
-      std::string(tokenizer.offset(), ' '));
-    
-    if (!msg.empty()) {
-      contextual_message = std::format("{}: {}", contextual_message, msg);
-    }
-    
-    return EvaluationError(type, contextual_message);
+  // Creates an error with the current tokenizer position
+  const auto make_error = [&tokenizer](EvaluationError::ErrorType type) -> EvaluationError {
+    return EvaluationError(type, tokenizer.offset());
   };
 
   const auto evalStacks = [&]() -> std::expected<void, EvaluationError> {
     auto result = ::evaluateStacks(numbers, operators);
     if (!result) {
-      return std::unexpected(make_error(result.error().type, result.error().message));
+      return std::unexpected(make_error(result.error().type));
     }
     return {};
   };
@@ -211,7 +188,7 @@ template<std::integral Type>
     auto next = tokenizer.nextToken();
 
     if (next.empty()) { 
-      return std::unexpected(make_error(EvaluationError::ErrorType::EMPTY_TOKEN)); 
+      return std::unexpected(EvaluationError(EvaluationError::ErrorType::EMPTY_TOKEN, tokenizer.offset())); 
     }
 
     auto value = Operators::PLUS_SIGN;
@@ -248,7 +225,7 @@ template<std::integral Type>
         operation = false;
         auto parsed_result = from_chars<int>(next);
         if (!parsed_result) {
-          return std::unexpected(make_error(parsed_result.error().type, parsed_result.error().message));
+          return std::unexpected(parsed_result.error());
         }
         numbers.emplace(*parsed_result, 1);
         break;
@@ -294,14 +271,14 @@ template<std::integral Type>
   }
 
   if (!operators.empty() || tokenizer.hasUnparsedInput()) {
-    return std::unexpected(make_error(EvaluationError::ErrorType::INVALID_EXPRESSION));
+    return std::unexpected(EvaluationError(EvaluationError::ErrorType::INVALID_EXPRESSION, tokenizer.offset()));
   }
 
   if (numbers.peek() != nullptr) {
     return *numbers.peek();
   }
 
-  return std::unexpected(make_error(EvaluationError::ErrorType::INVALID_EXPRESSION));
+  return std::unexpected(EvaluationError(EvaluationError::ErrorType::INVALID_EXPRESSION, tokenizer.offset()));
 }
 
 [[nodiscard]] constexpr auto evaluate(std::string_view input) -> std::expected<RationalNumber, EvaluationError>
