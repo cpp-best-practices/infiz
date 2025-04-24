@@ -3,6 +3,7 @@
 
 #include <compare>
 #include <numeric>
+#include <cstdlib>
 
 /**
  * A Class that stores the numerator and denominator
@@ -17,7 +18,12 @@ public:
 
   [[nodiscard]] constexpr auto simplify() const noexcept -> RationalNumber
   {
-    const auto gcd = std::gcd(numerator, denominator);
+    // Handle negative denominators - move the negative sign to the numerator
+    if (denominator < 0) {
+      return RationalNumber(-numerator, -denominator).simplify();
+    }
+    
+    const auto gcd = std::gcd(std::abs(numerator), denominator);
     if (gcd == 0) {
       return *this;
     } else {
