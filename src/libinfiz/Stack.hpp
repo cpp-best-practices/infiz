@@ -5,8 +5,14 @@
 #include <cassert>
 #include <cstddef>
 #include <vector>
-#include <stdexcept>
+#include <expected>
+#include <string>
+#include <format>
 
+struct StackError {
+  std::string message;
+  explicit constexpr StackError(std::string_view msg) : message(msg) {}
+};
 
 template<typename Contained> class Stack
 {
@@ -15,9 +21,11 @@ public:
 
   [[nodiscard]] constexpr auto empty() const noexcept -> bool { return data.empty(); }
 
-  constexpr auto pop() -> Contained
+  constexpr auto pop() -> std::expected<Contained, StackError>
   {
-    if (data.empty()) { throw std::runtime_error("No elements left to pop!"); }
+    if (data.empty()) { 
+      return std::unexpected(StackError("No elements left to pop!")); 
+    }
     Contained toReturn = data.back();
     data.pop_back();
     return toReturn;
