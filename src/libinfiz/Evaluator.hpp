@@ -175,6 +175,9 @@ template<std::integral Type>
   const auto make_error = [&tokenizer](EvaluationError::ErrorType type) -> EvaluationError {
     return EvaluationError(type, tokenizer.offset());
   };
+  
+  // Track parenthesis balance to detect mismatches
+  int parenthesis_count = 0;
 
   const auto evalStacks = [&]() -> std::expected<void, EvaluationError> {
     auto result = ::evaluateStacks(numbers, operators);
@@ -214,10 +217,16 @@ template<std::integral Type>
         break;
       case ')':
         value = Operators::CLOSE_PAREN;
+        parenthesis_count--; // Decrement for closing parenthesis
+        // Check for negative count (more closing than opening parentheses)
+        if (parenthesis_count < 0) {
+          return std::unexpected(EvaluationError(EvaluationError::ErrorType::INVALID_EXPRESSION, tokenizer.offset() - 1));
+        }
         operation = true;
         break;
       case '(':
         value = Operators::OPEN_PAREN;
+        parenthesis_count++; // Increment open parenthesis count
         operation = true;
         break;
 
@@ -238,6 +247,12 @@ template<std::integral Type>
           break;
         }
         case Operators::CLOSE_PAREN: {
+          // Check if the top of the stack is an opening parenthesis (empty parentheses case)
+          if (operators.peek() != nullptr && *operators.peek() == Operators::OPEN_PAREN) {
+            // Empty parentheses like () or part of (()) - not valid in this calculator
+            return std::unexpected(EvaluationError(EvaluationError::ErrorType::INVALID_EXPRESSION, tokenizer.offset() - 1));
+          }
+          
           operators.push(value);
           auto eval_result = evalStacks();
           if (!eval_result) {
@@ -270,6 +285,11 @@ template<std::integral Type>
     }
   }
 
+  // Check for unbalanced parentheses
+  if (parenthesis_count > 0) {
+    return std::unexpected(EvaluationError(EvaluationError::ErrorType::INVALID_EXPRESSION, tokenizer.offset()));
+  }
+  
   if (!operators.empty() || tokenizer.hasUnparsedInput()) {
     return std::unexpected(EvaluationError(EvaluationError::ErrorType::INVALID_EXPRESSION, tokenizer.offset()));
   }

@@ -33,6 +33,10 @@ public:
 
   [[nodiscard]] constexpr auto operator/(const RationalNumber &rhs) const noexcept
   {
+    // Check for division by zero - return 1/0 which will be infinity when displayed as float
+    if (rhs.getNumerator() == 0) {
+      return RationalNumber{ 1, 0 };
+    }
     return RationalNumber{ numerator * rhs.getDenominator(), denominator * rhs.getNumerator() }.simplify();
   }
 
